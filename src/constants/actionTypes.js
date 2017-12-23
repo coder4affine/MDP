@@ -8,3 +8,6 @@ export const LOAD_PIN_FAIL = 'LOAD_PIN_FAIL';
 export const SET_PIN = 'SET_PIN';
 export const SET_PIN_SUCCESS = 'SET_PIN_SUCCESS';
 export const SET_PIN_FAIL = 'SET_PIN_FAIL';
+
+export const PIN = 'PIN';
+export const MAIN = 'MAIN';

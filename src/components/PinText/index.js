@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, TextInput, Text } from 'react-native';
+import { View, TextInput, Text, StyleSheet } from 'react-native';
 
 export default class PinText extends Component {
   static propTypes = {
@@ -49,6 +49,7 @@ export default class PinText extends Component {
   }
 
   onFocus(index) {
+    this.codeInputRefs[index].setNativeProps({ borderColor: 'green' });
     const newCodeArr = this.state.codeArr.slice(0);
     const currentEmptyIndex = newCodeArr.findIndex(c => !c);
     if (currentEmptyIndex !== -1 && currentEmptyIndex < index) {
@@ -112,6 +113,8 @@ export default class PinText extends Component {
   render() {
     const { codeLength, autoFocus } = this.props;
 
+    const { currentIndex } = this.state;
+
     const dataArray = new Array(codeLength).fill('');
 
     return (
@@ -130,10 +133,13 @@ export default class PinText extends Component {
               style={{
                 height: 40,
                 width: 40,
-                borderWidth: 1,
-                borderColor: 'gray',
+                borderWidth: StyleSheet.hairlineWidth,
+                borderColor: currentIndex === index ? 'green' : '#D3D3D3',
                 borderRadius: 4,
-                paddingHorizontal: 8,
+                fontSize: 16,
+                paddingHorizontal: 14,
+                paddingTop: 5,
+                fontWeight: '600',
               }}
               placeholder="*"
               underlineColorAndroid="transparent"

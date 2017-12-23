@@ -1,28 +1,31 @@
 import { createStore, applyMiddleware, compose } from 'redux';
+import { REHYDRATE, PURGE, persistCombineReducers, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // or whatever storage you are using
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import rootReducer from './reducers';
 
+const config = {
+  key: 'primary',
+  storage,
+  blacklist: ['app'],
+};
+
+const reducer = persistCombineReducers(config, rootReducer);
+
 let middleware = [thunk];
-let middlewareApply;
+// let middlewareApply;
 
 if (__DEV__) {
-  const newLocal = require('redux-immutable-state-invariant');
-
-  const reduxImmutableStateInvariant = newLocal.default();
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      // Prevents Redux DevTools from re-dispatching all previous actions.
-      shouldHotReload: false,
-    })
-    : compose;
-  middleware = [...middleware, reduxImmutableStateInvariant, logger];
-  middlewareApply = composeEnhancers(applyMiddleware(...middleware));
+  middleware = [...middleware, logger];
 } else {
   middleware = [...middleware];
-  middlewareApply = applyMiddleware(...middleware);
 }
 
 export default function configureStore(initialState) {
-  return createStore(rootReducer, initialState, middlewareApply);
+  const store = createStore(reducer, initialState, compose(applyMiddleware(...middleware)));
+  persistStore(store, null, () => {
+    store.getState();
+  });
+  return store;
 }

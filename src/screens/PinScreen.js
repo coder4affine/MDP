@@ -9,12 +9,15 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
   Dimensions,
-  AlertIOS,
+  TouchableHighlight,
 } from 'react-native';
-import changeLocale from '../actions/languageAction';
+import TouchID from 'react-native-touch-id';
+
+import { MAIN } from '../constants/actionTypes';
+import { changeAppRoot } from '../actions/app';
+import setPin from '../actions/pinActions';
 import PinText from '../components/PinText';
 import LocaleWrapper from '../HOC/LocaleWrapper';
-import TouchID from 'react-native-touch-id';
 
 import I18n from '../i18n';
 
@@ -65,8 +68,8 @@ const styles = StyleSheet.create({
 export class PinScreen extends Component<{}> {
   static propTypes = {
     pin: PropTypes.string.isRequired,
-    loading: PropTypes.bool.isRequired,
-    error: PropTypes.string.isRequired,
+    setPin: PropTypes.func.isRequired,
+    changeAppRoot: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -76,40 +79,41 @@ export class PinScreen extends Component<{}> {
       pin: props.pin,
       pinFocus1: true,
       pinFocus2: false,
+      touchID: false,
+      error: '',
     };
 
     this.imageHeight = new Animated.Value(IMAGE_HEIGHT);
+    this.touchAuth = this.touchAuth.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillMount() {
     this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
     this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
     TouchID.isSupported()
-      .then((biometryType) => {
-        // Success code
-        TouchID.authenticate('to demo this react-native component', optionalConfigObject)
-          .then((success) => {
-            AlertIOS.alert('Authenticated Successfully');
-          })
-          .catch((error) => {
-            AlertIOS.alert('Authentication Failed');
-          });
-
-        if (biometryType === 'FaceID') {
-          console.log('FaceID is supported.');
-        } else {
-          console.log('TouchID is supported.');
-        }
+      .then(() => {
+        this.setState({ touchID: true });
+        this.touchAuth();
       })
-      .catch((error) => {
-        // Failure code
-        console.log(`error ${error}`);
+      .catch(() => {
+        console.log('Touch ID not supported');
       });
   }
 
   componentWillUnmount() {
     this.keyboardWillShowSub.remove();
     this.keyboardWillHideSub.remove();
+  }
+
+  onSubmit(isMatching, code) {
+    this.setState({ pinFocus1: false, pinFocus2: false });
+    if (isMatching) {
+      this.props.setPin(code);
+      this.props.changeAppRoot(MAIN);
+    } else {
+      this.setState({ error: 'Authantication Fail' });
+    }
   }
 
   keyboardWillShow = (event) => {
@@ -126,13 +130,26 @@ export class PinScreen extends Component<{}> {
     }).start();
   };
 
+  touchAuth() {
+    TouchID.authenticate('to demo this react-native component', optionalConfigObject)
+      .then(() => {
+        this.props.changeAppRoot('after-pin');
+      })
+      .catch(() => {
+        this.setState({ error: 'Authentication Failed' });
+      });
+  }
+
   render() {
-    const { pin, pinFocus1, pinFocus2 } = this.state;
+    const {
+      pin, pinFocus1, pinFocus2, touchID, error,
+    } = this.state;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <Animated.Image source={logo} style={[styles.logo, { height: this.imageHeight }]} />
         <Text>{I18n.t('selectPin')}</Text>
-        <View style={{ justifyContent: 'space-around', height: 100 }}>
+        {!!error && <Text>{error}</Text>}
+        <View style={{ justifyContent: 'space-around', height: 200 }}>
           {!this.props.pin && (
             <PinText
               codeLength={4}
@@ -145,9 +162,27 @@ export class PinScreen extends Component<{}> {
             codeLength={4}
             autoFocus={pinFocus2}
             compareWithCode={pin}
-            onFulfill={data => this.setState({ pinFocus1: false, pinFocus2: false })}
+            onFulfill={this.onSubmit}
             onFistBack={() => this.setState({ pinFocus1: true, pinFocus2: false })}
           />
+
+          {touchID && (
+            <TouchableHighlight onPress={this.touchAuth} underlayColor="#D3D3D3">
+              <View
+                style={{
+                  backgroundColor: 'green',
+                  borderRadius: 4,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: 40,
+                }}
+              >
+                <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>
+                  Unlock with Touch ID
+                </Text>
+              </View>
+            </TouchableHighlight>
+          )}
         </View>
       </KeyboardAvoidingView>
     );
@@ -155,17 +190,18 @@ export class PinScreen extends Component<{}> {
 }
 
 const mapStateToProps = (state) => {
-  const { loading, pin, error } = state.pin;
+  const { pin } = state.pin;
   return {
     pin,
-    loading,
-    error,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  changeLocale: (locale) => {
-    dispatch(changeLocale(locale));
+  changeAppRoot: (root) => {
+    dispatch(changeAppRoot(root));
+  },
+  setPin: (pin) => {
+    dispatch(setPin(pin));
   },
 });
 
