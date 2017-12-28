@@ -67,7 +67,6 @@ class InputText extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: '',
       showModal: false,
       pickerDate: moment().toDate(),
     };
@@ -76,11 +75,13 @@ class InputText extends Component {
     this.selectDate = this.selectDate.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps = (nextProps) => {
     if (this.props.input.value !== nextProps.input.value) {
-      this.setState({ date: '' });
+      if (moment(nextProps.input.value, 'L').isValid()) {
+        this.setState({ pickerDate: moment(nextProps.input.value).toDate() });
+      }
     }
-  }
+  };
 
   openPicker() {
     const { OS } = Platform;
@@ -96,7 +97,7 @@ class InputText extends Component {
       const {
         action, year, month, day,
       } = await DatePickerAndroid.open({
-        date: moment().toDate(),
+        date: this.state.pickerDate,
         mode: 'spinner',
       });
       if (action === DatePickerAndroid.dateSetAction) {
@@ -113,7 +114,8 @@ class InputText extends Component {
   }
 
   selectDate(date) {
-    this.setState({ date: moment(date).format('L'), showModal: false });
+    this.props.input.onChange(moment(date).format('L'));
+    this.setState({ showModal: false });
   }
 
   render() {
@@ -121,12 +123,11 @@ class InputText extends Component {
       input, meta, inputRef, ...inputProps
     } = this.props;
     const { OS } = Platform;
-    const { showModal, pickerDate, date } = this.state;
+    const { showModal, pickerDate } = this.state;
     // do not display warning if the field has not been touched or if it's currently being edited
     const valid = meta.touched && !meta.active ? !!meta.valid : true;
     const errorStyle = !valid && styles.invalid;
 
-    const value = date || input.value;
     return (
       <View>
         <TextInput
@@ -135,7 +136,7 @@ class InputText extends Component {
           onChangeText={input.onChange}
           onBlur={input.onBlur}
           onFocus={input.onFocus}
-          value={value}
+          value={input.value}
           style={[styles.input, errorStyle]}
           underlineColorAndroid={valid ? 'gray' : 'rgb(244, 67, 54)'}
         />
@@ -176,6 +177,9 @@ class InputText extends Component {
                 <DatePickerIOS
                   mode="date"
                   date={pickerDate}
+                  ref={(dateInput) => {
+                    this.dateInput = dateInput;
+                  }}
                   onDateChange={nd => this.setState({ pickerDate: nd })}
                 />
               </View>

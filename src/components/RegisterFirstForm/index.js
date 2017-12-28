@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import commonStyle from '../../commonStyle';
 
 import TextInput from '../../inputControls/textInput';
@@ -24,28 +24,35 @@ const validate = (values) => {
   return errors;
 };
 
-const dateFormatter = (number) => {
-  if (!number) return '';
-  const splitter = /.{1,2}/g;
-  number = number.substring(0, 8);
-  return (
-    number
-      .substring(0, 6)
-      .match(splitter)
-      .join('/') + number.substring(6)
-  );
+const normalizeDate = (value, previousValue) => {
+  if (!value) {
+    return value;
+  }
+  const onlyNums = value.replace(/[^\d]/g, '');
+  if (!previousValue || value.length > previousValue.length) {
+    // typing forward
+    if (onlyNums.length === 2) {
+      return `${onlyNums}/`;
+    }
+    if (onlyNums.length === 4) {
+      return `${onlyNums.slice(0, 2)}/${onlyNums.slice(2)}/`;
+    }
+  }
+  if (onlyNums.length <= 2) {
+    return onlyNums;
+  }
+  if (onlyNums.length <= 4) {
+    return `${onlyNums.slice(0, 2)}/${onlyNums.slice(2)}`;
+  }
+  return `${onlyNums.slice(0, 2)}/${onlyNums.slice(2, 4)}/${onlyNums.slice(4, 8)}`;
 };
 
-const dateParser = number => (number ? number.replace(/\//g, '') : '');
-
-function RegisterFirst({
+const RegisterFirst = ({
   pristine, handleSubmit, submitting, error,
-}) {
-  return [
-    <View key={0} style={{ margin: 10 }}>
-      {error && <Text>{error}</Text>}
-    </View>,
-    <View key={1} style={{ margin: 10 }}>
+}) => (
+  <ScrollView keyboardShouldPersistTaps="handled">
+    <View style={{ margin: 10 }}>{error && <Text>{error}</Text>}</View>
+    <View style={{ margin: 10 }}>
       <Text style={commonStyle.text}>First Name</Text>
       <Field
         name="FirstName"
@@ -56,8 +63,8 @@ function RegisterFirst({
           this.lastName.focus();
         }}
       />
-    </View>,
-    <View key={2} style={{ margin: 10 }}>
+    </View>
+    <View style={{ margin: 10 }}>
       <Text style={commonStyle.text}>Last Name</Text>
       <Field
         name="LastName"
@@ -71,15 +78,14 @@ function RegisterFirst({
           this.birthDate.focus();
         }}
       />
-    </View>,
-    <View key={3} style={{ margin: 10 }}>
+    </View>
+    <View style={{ margin: 10 }}>
       <Text style={commonStyle.text}>Birth Date</Text>
       <Field
         name="BirthDate"
         component={DatePicker}
         placeholder="MM/DD/YYYY"
-        format={dateFormatter}
-        parse={dateParser}
+        normalize={normalizeDate}
         returnKeyType="next"
         keyboardType="numeric"
         inputRef={(el) => {
@@ -89,8 +95,8 @@ function RegisterFirst({
           this.ssn.focus();
         }}
       />
-    </View>,
-    <View key={4} style={{ borderWidth: StyleSheet.hairlineWidth, margin: 5, borderRadius: 4 }}>
+    </View>
+    <View style={{ borderWidth: StyleSheet.hairlineWidth, margin: 5, borderRadius: 4 }}>
       <View style={{ margin: 10 }}>
         <Text style={commonStyle.text}>Social Security Number</Text>
         <Field
@@ -131,17 +137,17 @@ function RegisterFirst({
           onSubmitEditing={() => !(pristine || submitting) && handleSubmit()}
         />
       </View>
-    </View>,
-    <View key={5} style={{ margin: 10 }}>
+    </View>
+    <View style={{ margin: 10 }}>
       <Button
         text="Next"
         onPress={() => !(pristine || submitting) && handleSubmit()}
         disabled={pristine || submitting}
         submitting={submitting}
       />
-    </View>,
-  ];
-}
+    </View>
+  </ScrollView>
+);
 
 RegisterFirst.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

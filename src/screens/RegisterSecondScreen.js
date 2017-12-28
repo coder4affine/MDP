@@ -70,7 +70,6 @@ class RegisterSecond extends Component {
 RegisterSecond.propTypes = {
   actions: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
-  resetForm: PropTypes.func.isRequired,
   registerData: PropTypes.object.isRequired,
   changeAppRoot: PropTypes.func.isRequired,
   register: PropTypes.object.isRequired,
@@ -85,9 +84,6 @@ const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(authAction, dispatch),
   changeAppRoot: (root) => {
     dispatch(changeAppRoot(root));
-  },
-  resetForm: () => {
-    dispatch(reset('signIn'));
   },
 });
 

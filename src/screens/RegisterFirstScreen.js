@@ -28,6 +28,9 @@ class RegisterFirst extends Component {
       passProps: {
         registerData,
       },
+      navigatorStyle: {
+        screenBackgroundColor: 'white',
+      },
       navigatorButtons: {
         leftButtons: [{ title: 'Cancel', id: 'closeAllModal' }],
       },
@@ -35,6 +38,7 @@ class RegisterFirst extends Component {
   }
 
   checkUserExist(formData) {
+    console.log(formData);
     const newData = {
       ...formData,
       BirthDate: moment(formData.BirthDate, 'L').format('L'),

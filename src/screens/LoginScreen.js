@@ -8,6 +8,7 @@ import {
   Dimensions,
   TouchableHighlight,
   Text,
+  Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -37,24 +38,34 @@ class Login extends Component {
   }
 
   componentWillMount() {
-    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
-    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+    if (Platform.OS === 'ios') {
+      this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
+      this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+    } else {
+      this.keyboardDidShow = Keyboard.addListener('keyboardDidShow', this.keyboardWillShow);
+      this.keyboardDidHide = Keyboard.addListener('keyboardDidHide', this.keyboardWillHide);
+    }
   }
 
   componentWillUnmount() {
-    this.keyboardWillShowSub.remove();
-    this.keyboardWillHideSub.remove();
+    if (Platform.OS === 'ios') {
+      this.keyboardWillShowSub.remove();
+      this.keyboardWillHideSub.remove();
+    } else {
+      this.keyboardDidShow.remove();
+      this.keyboardDidHide.remove();
+    }
   }
   keyboardWillShow = (event) => {
     Animated.timing(this.imageHeight, {
-      duration: event.duration,
+      duration: event ? event.duration : 250,
       toValue: IMAGE_HEIGHT_SMALL,
     }).start();
   };
 
   keyboardWillHide = (event) => {
     Animated.timing(this.imageHeight, {
-      duration: event.duration,
+      duration: event ? event.duration : 250,
       toValue: IMAGE_HEIGHT,
     }).start();
   };

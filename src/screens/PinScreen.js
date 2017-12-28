@@ -59,8 +59,13 @@ export class PinScreen extends Component<{}> {
   }
 
   componentWillMount() {
-    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
-    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+    if (Platform.OS === 'ios') {
+      this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
+      this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+    } else {
+      this.keyboardDidShow = Keyboard.addListener('keyboardDidShow', this.keyboardWillShow);
+      this.keyboardDidHide = Keyboard.addListener('keyboardDidHide', this.keyboardWillHide);
+    }
     if (Platform.OS === 'ios') {
       TouchID.isSupported()
         .then(() => {
@@ -74,8 +79,13 @@ export class PinScreen extends Component<{}> {
   }
 
   componentWillUnmount() {
-    this.keyboardWillShowSub.remove();
-    this.keyboardWillHideSub.remove();
+    if (Platform.OS === 'ios') {
+      this.keyboardWillShowSub.remove();
+      this.keyboardWillHideSub.remove();
+    } else {
+      this.keyboardDidShow.remove();
+      this.keyboardDidHide.remove();
+    }
   }
 
   onSubmit(isMatching, code) {
@@ -94,14 +104,14 @@ export class PinScreen extends Component<{}> {
 
   keyboardWillShow = (event) => {
     Animated.timing(this.imageHeight, {
-      duration: event.duration,
+      duration: event ? event.duration : 250,
       toValue: IMAGE_HEIGHT_SMALL,
     }).start();
   };
 
   keyboardWillHide = (event) => {
     Animated.timing(this.imageHeight, {
-      duration: event.duration,
+      duration: event ? event.duration : 250,
       toValue: IMAGE_HEIGHT,
     }).start();
   };
