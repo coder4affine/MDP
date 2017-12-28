@@ -5,13 +5,13 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import rootReducer from './reducers';
 
-const config = {
-  key: 'primary',
-  storage,
-  blacklist: ['app'],
-};
+// const config = {
+//   key: 'primary',
+//   storage,
+//   blacklist: ['app', 'form', 'loading', 'error'],
+// };
 
-const reducer = persistCombineReducers(config, rootReducer);
+// const reducer = persistCombineReducers(config, rootReducer);
 
 let middleware = [thunk];
 // let middlewareApply;
@@ -23,7 +23,7 @@ if (__DEV__) {
 }
 
 export default function configureStore(initialState) {
-  const store = createStore(reducer, initialState, compose(applyMiddleware(...middleware)));
+  const store = createStore(rootReducer, initialState, compose(applyMiddleware(...middleware)));
   persistStore(store, null, () => {
     store.getState();
   });

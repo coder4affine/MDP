@@ -16,13 +16,11 @@
 ; Ignore polyfills
 .*/Libraries/polyfills/.*
 
-; Ignore React Native Libraries
-.*/react-native/Libraries/.*
-
 
 [include]
 
 [libs]
+flow-typed
 node_modules/react-native/Libraries/react-native/react-native-interface.js
 node_modules/react-native/flow/
 
@@ -34,6 +32,7 @@ module.system=haste
 munge_underscores=true
 
 module.name_mapper='^[./a-zA-Z0-9$_-]+\.\(bmp\|gif\|jpg\|jpeg\|png\|psd\|svg\|webp\|m4v\|mov\|mp4\|mpeg\|mpg\|webm\|aac\|aiff\|caf\|m4a\|mp3\|wav\|html\|pdf\)$' -> 'RelativeImageStub'
+
 
 suppress_type=$FlowIssue
 suppress_type=$FlowFixMe

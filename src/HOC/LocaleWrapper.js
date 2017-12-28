@@ -11,6 +11,7 @@ function LocaleWrapper(WrapperComponent) {
     static propTypes = {
       locale: PropTypes.string.isRequired,
       changeLocale: PropTypes.func.isRequired,
+      navigator: PropTypes.object.isRequired,
     };
 
     constructor(props) {
@@ -35,6 +36,22 @@ function LocaleWrapper(WrapperComponent) {
       if (event.type === 'NavBarButtonPress') {
         if (event.id === 'locale') {
           this.openLocaleSelect();
+        }
+        if (event.id === 'closeModal') {
+          this.props.navigator.dismissModal({
+            animationType: 'slide-down', // 'none' / 'slide-down' , dismiss animation for the modal (optional, default 'slide-down')
+          });
+        }
+        if (event.id === 'closeAllModal') {
+          this.props.navigator.dismissAllModals({
+            animationType: 'slide-down', // 'none' / 'slide-down' , dismiss animation for the modal (optional, default 'slide-down')
+          });
+        }
+        if (event.id === 'menu') {
+          this.props.navigator.toggleDrawer({
+            side: 'left',
+            animated: true,
+          });
         }
       }
     }

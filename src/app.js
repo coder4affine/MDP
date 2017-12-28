@@ -2,7 +2,7 @@
 import { Provider } from 'react-redux';
 import { Platform } from 'react-native';
 import { Navigation } from 'react-native-navigation';
-import { PIN, MAIN } from './constants/actionTypes';
+import { PIN, MAIN, LOGIN } from './constants/actionTypes';
 import configureStore from './configureStore';
 import { appInitialized } from './actions/app';
 import { registerScreens } from './screens';
@@ -18,6 +18,8 @@ export default class App {
     store.dispatch(appInitialized());
   }
 
+  currentRoot: '';
+
   onStoreUpdate() {
     const { root } = store.getState().app;
     if (this.currentRoot !== root) {
@@ -28,7 +30,7 @@ export default class App {
     }
   }
 
-  startApp = (root) => {
+  startApp = (root: string) => {
     const { OS } = Platform;
     if (root === PIN) {
       Navigation.startSingleScreenApp({
@@ -38,7 +40,15 @@ export default class App {
           navigatorStyle: {},
         },
       });
-    } else {
+    } else if (root === LOGIN) {
+      Navigation.startSingleScreenApp({
+        screen: {
+          screen: 'mdp.LoginScreen',
+          title: 'Login',
+          navigatorStyle: {},
+        },
+      });
+    } else if (root === MAIN) {
       Navigation.startTabBasedApp({
         tabs: [
           {
@@ -121,20 +131,22 @@ export default class App {
         passProps: {},
         animationType: 'slide-down',
         title: 'Redux Example',
-        drawer: {
-          // optional, add this if you want a side menu drawer in your app
-          left: {
-            // optional, define if you want a drawer from the left
-            screen: 'mdp.SideMenu', // unique ID registered with Navigation.registerScreen
-          },
-          disableOpenGesture: false, // optional, can the drawer be opened with a swipe instead of button
-          passProps: {
-            title: 'Hello from SideMenu',
-          },
-        },
         appStyle: {
           bottomTabBadgeTextColor: '#ffffff',
           bottomTabBadgeBackgroundColor: '#ff0000',
+        },
+        drawer: {
+          left: {
+            screen: 'mdp.SideMenu',
+          },
+        },
+      });
+    } else {
+      Navigation.startSingleScreenApp({
+        screen: {
+          screen: 'mdp.ErrorScreen',
+          title: 'Error',
+          navigatorStyle: {},
         },
       });
     }

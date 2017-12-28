@@ -14,4 +14,6 @@ export default {
   ],
   primaryColor: 'green',
   secondaryColor: '#ffffff',
+  serviceApi: 'https://dev.mobiledigitalplatform.com:1024/',
+  webURI: 'https://dev.mobiledigitalplatform.com/',
 };

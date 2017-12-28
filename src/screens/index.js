@@ -6,7 +6,11 @@ import HomeScreen from './HomeScreen';
 import DigitalCardScreen from './DigitalCardScreen';
 import MemberResourceScreen from './MemberResourceScreen';
 import AlertsScreen from './AlertsScreen';
+import LoginScreen from './LoginScreen';
+import RegisterFirstScreen from './RegisterFirstScreen';
+import RegisterSecondScreen from './RegisterSecondScreen';
 import SideMenu from './SideMenu';
+import ErrorScreen from './ErrorScreen';
 import LanguageSelect from '../components/LanguageSelect';
 
 // register all screens of the app (including internal ones)
@@ -21,6 +25,20 @@ export function registerScreens(store, Provider) {
     Provider,
   );
   Navigation.registerComponent('mdp.AlertsScreen', () => AlertsScreen, store, Provider);
+  Navigation.registerComponent('mdp.LoginScreen', () => LoginScreen, store, Provider);
+  Navigation.registerComponent(
+    'mdp.RegisterFirstScreen',
+    () => RegisterFirstScreen,
+    store,
+    Provider,
+  );
+  Navigation.registerComponent(
+    'mdp.RegisterSecondScreen',
+    () => RegisterSecondScreen,
+    store,
+    Provider,
+  );
   Navigation.registerComponent('mdp.SideMenu', () => SideMenu, store, Provider);
+  Navigation.registerComponent('mdp.ErrorScreen', () => ErrorScreen, store, Provider);
   Navigation.registerComponent('mdp.LanguageSelect', () => LanguageSelect, store, Provider);
 }

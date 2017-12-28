@@ -10,14 +10,16 @@ import {
   StyleSheet,
   Dimensions,
   TouchableHighlight,
+  Platform,
 } from 'react-native';
 import TouchID from 'react-native-touch-id';
 
-import { MAIN } from '../constants/actionTypes';
+import { MAIN, LOGIN } from '../constants/actionTypes';
 import { changeAppRoot } from '../actions/app';
 import setPin from '../actions/pinActions';
 import PinText from '../components/PinText';
 import LocaleWrapper from '../HOC/LocaleWrapper';
+import styles from '../commonStyle';
 
 import I18n from '../i18n';
 
@@ -32,44 +34,12 @@ const optionalConfigObject = {
   color: '#e00606',
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#4c69a5',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  input: {
-    height: 50,
-    backgroundColor: '#fff',
-    marginHorizontal: 10,
-    marginVertical: 5,
-    // paddingVertical: 5,
-    // paddingHorizontal: 15,
-    width: window.width - 30,
-  },
-  logo: {
-    height: IMAGE_HEIGHT,
-    resizeMode: 'contain',
-    marginBottom: 20,
-    padding: 10,
-    marginTop: 20,
-  },
-  register: {
-    marginBottom: 20,
-    width: window.width - 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 50,
-    backgroundColor: '#ffae',
-  },
-});
-
 export class PinScreen extends Component<{}> {
   static propTypes = {
     pin: PropTypes.string.isRequired,
     setPin: PropTypes.func.isRequired,
     changeAppRoot: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -91,14 +61,16 @@ export class PinScreen extends Component<{}> {
   componentWillMount() {
     this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
     this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
-    TouchID.isSupported()
-      .then(() => {
-        this.setState({ touchID: true });
-        this.touchAuth();
-      })
-      .catch(() => {
-        console.log('Touch ID not supported');
-      });
+    if (Platform.OS === 'ios') {
+      TouchID.isSupported()
+        .then(() => {
+          this.setState({ touchID: true });
+          this.touchAuth();
+        })
+        .catch(() => {
+          console.log('Touch ID not supported');
+        });
+    }
   }
 
   componentWillUnmount() {
@@ -110,7 +82,11 @@ export class PinScreen extends Component<{}> {
     this.setState({ pinFocus1: false, pinFocus2: false });
     if (isMatching) {
       this.props.setPin(code);
-      this.props.changeAppRoot(MAIN);
+      if (this.props.auth.user) {
+        this.props.changeAppRoot(MAIN);
+      } else {
+        this.props.changeAppRoot(LOGIN);
+      }
     } else {
       this.setState({ error: 'Authantication Fail' });
     }
@@ -193,6 +169,7 @@ const mapStateToProps = (state) => {
   const { pin } = state.pin;
   return {
     pin,
+    auth: state.auth,
   };
 };
 

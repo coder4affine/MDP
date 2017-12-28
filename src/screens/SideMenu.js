@@ -1,15 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
+import { connect } from 'react-redux';
 
-export default class SideMenu extends Component {
-  static propTypes = {};
+import I18n from '../i18n';
 
+const { width } = Dimensions.get('window');
+
+class SideMenu extends Component {
   render() {
     return (
-      <View>
-        <Text>Side Menu</Text>
+      <View
+        style={{
+          flex: 1,
+          width: 250,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#ffffff',
+        }}
+      >
+        <Text>hello</Text>
       </View>
     );
   }
 }
+
+export default connect()(SideMenu);
