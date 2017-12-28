@@ -128,17 +128,27 @@ export default class App {
             navigatorStyle: {},
           },
         ],
+        drawer: {
+          left: {
+            screen: 'mdp.SideMenu',
+            passProps: {},
+            disableOpenGesture: false,
+            fixedWidth: 700,
+          },
+          style: {
+            contentOverlayColor: 'rgba(0,0,0,0.25)',
+            leftDrawerWidth: 50,
+          },
+          type: 'TheSideBar',
+          animationType: 'facebook',
+          disableOpenGesture: false,
+        },
         passProps: {},
         animationType: 'slide-down',
         title: 'Redux Example',
         appStyle: {
           bottomTabBadgeTextColor: '#ffffff',
           bottomTabBadgeBackgroundColor: '#ff0000',
-        },
-        drawer: {
-          left: {
-            screen: 'mdp.SideMenu',
-          },
         },
       });
     } else {

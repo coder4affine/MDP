@@ -13,7 +13,6 @@ class SideMenu extends Component {
       <View
         style={{
           flex: 1,
-          width: 250,
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: '#ffffff',
