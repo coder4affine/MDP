@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Platform } from 'react-native';
+import { Platform, Share } from 'react-native';
 
 import { iconsMap } from '../utils/AppIcons';
 import ENIcon from '../images/countryFlags/en.png';
@@ -19,6 +19,7 @@ function LocaleWrapper(WrapperComponent, name = '') {
 
       this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
       this.openLocaleSelect = this.openLocaleSelect.bind(this);
+      this.openShare = this.openShare.bind(this);
     }
 
     componentWillMount = () => {
@@ -51,6 +52,9 @@ function LocaleWrapper(WrapperComponent, name = '') {
             side: 'left',
             animated: true,
           });
+        }
+        if (event.id === 'share') {
+          this.openShare();
         }
       }
       if (event.type === 'DeepLink') {
@@ -129,6 +133,19 @@ function LocaleWrapper(WrapperComponent, name = '') {
         adjustSoftInput: 'resize',
       });
     };
+
+    openShare() {
+      Share.share(
+        {
+          message: "BAM: we're helping your business with awesome React Native apps",
+          url: 'http://bam.tech',
+          title: 'Wow, did you see that?',
+        },
+        {
+          dialogTitle: 'Share BAM goodness',
+        },
+      );
+    }
 
     render() {
       return <WrapperComponent {...this.state} {...this.props} />;
