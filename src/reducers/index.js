@@ -31,16 +31,34 @@ const authPersistConfig = {
   blacklist: ['loading', 'error'],
 };
 
+const digitalCardPersistConfig = {
+  key: 'digitalCard',
+  storage,
+  blacklist: ['loading', 'error'],
+};
+
+const memberResourcePersistConfig = {
+  key: 'memberResource',
+  storage,
+  blacklist: ['loading', 'error'],
+};
+
+const alertsPersistConfig = {
+  key: 'alerts',
+  storage,
+  blacklist: ['loading', 'error'],
+};
+
 export default combineReducers({
   form,
   app,
   locale,
+  checkUser,
+  register,
   pin: persistReducer(pinPersistConfig, pin),
   auth: persistReducer(authPersistConfig, auth),
   home: persistReducer(homePersistConfig, home),
-  checkUser,
-  register,
-  digitalCard,
-  memberResource,
-  alerts,
+  digitalCard: persistReducer(digitalCardPersistConfig, digitalCard),
+  memberResource: persistReducer(memberResourcePersistConfig, memberResource),
+  alerts: persistReducer(alertsPersistConfig, alerts),
 });

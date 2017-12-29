@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
 
+import { iconsMap } from '../utils/AppIcons';
 import ENIcon from '../images/countryFlags/en.png';
 import ESIcon from '../images/countryFlags/es.png';
 
-function LocaleWrapper(WrapperComponent) {
+function LocaleWrapper(WrapperComponent, name = '') {
   class LocaleFilter extends Component {
     static propTypes = {
       locale: PropTypes.string.isRequired,
@@ -88,24 +89,34 @@ function LocaleWrapper(WrapperComponent) {
 
     setButton = (locale) => {
       const icon = locale.toLowerCase() === 'es' ? ESIcon : ENIcon;
-      let button = {};
+      const rightButtons = [];
       if (Platform.OS === 'ios') {
-        button = {
+        rightButtons.push({
           id: 'locale',
           component: 'mdp.FlagIcon',
           passProps: {
             locale,
           },
-        };
+        });
       } else {
-        button = {
+        rightButtons.push({
           id: 'locale',
           icon,
-        };
+        });
+      }
+
+      if (name === 'digitalCard') {
+        rightButtons.push({
+          icon: Platform.OS === 'ios' ? iconsMap['ios-share'] : iconsMap['md-share'],
+          id: 'share',
+          showAsAction: 'ifRoom',
+          buttonFontSize: 14,
+          buttonFontWeight: '600',
+        });
       }
 
       this.props.navigator.setButtons({
-        rightButtons: [button],
+        rightButtons,
       });
     };
 

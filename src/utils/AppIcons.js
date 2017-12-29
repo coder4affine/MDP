@@ -19,6 +19,8 @@ const icons = {
   'ios-medkit': [30],
   'ios-medkit-outline': [30],
   'md-medkit': [30],
+  'ios-share': [30],
+  'md-share': [30],
 };
 
 const iconsMap = {};

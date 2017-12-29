@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { View, Text, Alert } from 'react-native';
+import { View, Text, ImageBackground, Share } from 'react-native';
 import moment from 'moment';
+import Barcode from 'react-native-barcode-builder';
 
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import I18n from '../i18n';
 import * as digitalCardAction from '../actions/digitalCardAction';
 import * as authAction from '../actions/authAction';
 
-import RegisterSecondForm from '../components/RegisterSecondForm';
+import CardFront from '../images/oklahoma/CardFront_en_US.png';
+import CardBack from '../images/oklahoma/CardBack_en_US.png';
 
 export class DigitalCard extends Component {
   static propTypes = {
@@ -27,10 +29,20 @@ export class DigitalCard extends Component {
       loading: false,
     };
     this.getCard = this.getCard.bind(this);
+    this.openShare = this.openShare.bind(this);
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
 
   componentWillMount() {
     this.getCard();
+  }
+
+  onNavigatorEvent(event) {
+    if (event.type === 'NavBarButtonPress') {
+      if (event.id === 'share') {
+        this.openShare();
+      }
+    }
   }
 
   getCard() {
@@ -55,12 +67,63 @@ export class DigitalCard extends Component {
     }
   }
 
+  openShare() {
+    Share.share(
+      {
+        message: "BAM: we're helping your business with awesome React Native apps",
+        url: 'http://bam.tech',
+        title: 'Wow, did you see that?',
+      },
+      {
+        dialogTitle: 'Share BAM goodness',
+      },
+    );
+  }
+
   render() {
     return (
       <View>
-        <RegisterSecondForm
-          onSubmit={values => Alert.alert('Submitted!', JSON.stringify(values))}
-        />
+        <View style={{ alignItems: 'center' }}>
+          <ImageBackground style={{ width: 288, height: 186 }} source={CardFront}>
+            <Text
+              style={{
+                position: 'absolute',
+                top: 111,
+                left: 50,
+                backgroundColor: '#ECF4F9',
+              }}
+            >
+              Vijaya Gaddam
+            </Text>
+            <Text
+              style={{
+                position: 'absolute',
+                top: 136,
+                left: 64,
+                backgroundColor: '#ECF4F9',
+              }}
+            >
+              7022962246
+            </Text>
+            <Text
+              style={{
+                position: 'absolute',
+                top: 163,
+                left: 55,
+                backgroundColor: '#ECF4F9',
+              }}
+            >
+              11/13/17
+            </Text>
+          </ImageBackground>
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <ImageBackground style={{ width: 288, height: 186 }} source={CardBack}>
+            <View style={{ position: 'absolute', top: 12, left: 60 }}>
+              <Barcode height={30} width={1.5} value="7022962246" format="CODE128" />
+            </View>
+          </ImageBackground>
+        </View>
       </View>
     );
   }
@@ -76,4 +139,4 @@ const mapDispatchToProps = dispatch => ({
   authAction: bindActionCreators(authAction, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(DigitalCard));
+export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(DigitalCard, 'digitalCard'));
