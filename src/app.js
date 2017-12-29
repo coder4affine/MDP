@@ -71,6 +71,25 @@ export default class App {
             navigatorStyle: {},
           },
           {
+            label: 'My Benefits',
+            screen: 'mdp.MyBenefitsScreen',
+            title: 'My Benefits',
+            icon: iconsMap['ios-medkit'],
+            selectedIcon: iconsMap['ios-medkit-outline'],
+            navigatorButtons: {
+              leftButtons: [
+                {
+                  icon: OS === 'ios' ? iconsMap['ios-menu'] : iconsMap['md-menu'],
+                  id: 'menu',
+                  showAsAction: 'ifRoom',
+                  buttonFontSize: 14,
+                  buttonFontWeight: '600',
+                },
+              ],
+            },
+            navigatorStyle: {},
+          },
+          {
             label: 'Digital Card',
             screen: 'mdp.DigitalCardScreen',
             title: 'Digital Card',
@@ -137,7 +156,6 @@ export default class App {
           },
           style: {
             contentOverlayColor: 'rgba(0,0,0,0.25)',
-            leftDrawerWidth: 50,
           },
           type: 'TheSideBar',
           animationType: 'facebook',
@@ -149,6 +167,7 @@ export default class App {
         appStyle: {
           bottomTabBadgeTextColor: '#ffffff',
           bottomTabBadgeBackgroundColor: '#ff0000',
+          forceTitlesDisplay: true,
         },
       });
     } else {

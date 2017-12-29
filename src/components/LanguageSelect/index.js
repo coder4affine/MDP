@@ -2,22 +2,25 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, TouchableHighlight, Image, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux';
+import { Navigation } from 'react-native-navigation';
 import config from '../../config';
 import commonStyle from '../../commonStyle';
 import styles from './styles';
+import changeLocale from '../../actions/languageAction';
+import I18n from '../../i18n';
 
-export default class componentName extends Component {
+class LanguageSelect extends Component {
   static propTypes = {
-    currentLocale: PropTypes.string.isRequired,
-    languages: PropTypes.array.isRequired,
-    onSelect: PropTypes.func.isRequired,
+    locale: PropTypes.string.isRequired,
+    changeLocale: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      currentLocale: props.currentLocale,
+      locale: props.locale,
     };
 
     this.selectLanguage = this.selectLanguage.bind(this);
@@ -25,22 +28,23 @@ export default class componentName extends Component {
   }
 
   onSelect = () => {
-    this.props.onSelect(this.state.currentLocale);
+    Navigation.dismissLightBox();
+    this.props.changeLocale(this.state.locale);
+    I18n.locale = this.state.locale;
   };
 
-  selectLanguage = (currentLocale) => {
-    this.setState({ currentLocale });
+  selectLanguage = (locale) => {
+    this.setState({ locale });
   };
 
   render() {
-    const { languages } = this.props;
-    const { currentLocale } = this.state;
+    const { locale } = this.state;
     const { OS } = Platform;
     const iconType = OS === 'ios' ? 'ios' : 'md';
     return (
       <View style={styles.container}>
         <View style={commonStyle.flex}>
-          {languages.map(item => (
+          {config.locale.map(item => (
             <TouchableHighlight
               style={commonStyle.flex}
               key={item.key}
@@ -55,7 +59,7 @@ export default class componentName extends Component {
                 <View>
                   <Icon
                     name={
-                      currentLocale === item.key
+                      locale === item.key
                         ? `${iconType}-radio-button-on`
                         : `${iconType}-radio-button-off`
                     }
@@ -80,3 +84,18 @@ export default class componentName extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  const { locale } = state.locale;
+  return {
+    locale,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  changeLocale: (locale) => {
+    dispatch(changeLocale(locale));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LanguageSelect);

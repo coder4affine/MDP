@@ -16,6 +16,9 @@ const icons = {
   'ios-notifications': [30],
   'ios-paper-outline': [30],
   'ios-paper': [30],
+  'ios-medkit': [30],
+  'ios-medkit-outline': [30],
+  'md-medkit': [30],
 };
 
 const iconsMap = {};

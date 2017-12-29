@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Platform } from 'react-native';
 
-import changeLocale from '../actions/languageAction';
-import config from '../config';
-import I18n from '../i18n';
+import ENIcon from '../images/countryFlags/en.png';
+import ESIcon from '../images/countryFlags/es.png';
 
 function LocaleWrapper(WrapperComponent) {
   class LocaleFilter extends Component {
     static propTypes = {
       locale: PropTypes.string.isRequired,
-      changeLocale: PropTypes.func.isRequired,
       navigator: PropTypes.object.isRequired,
     };
 
@@ -19,7 +18,6 @@ function LocaleWrapper(WrapperComponent) {
 
       this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
       this.openLocaleSelect = this.openLocaleSelect.bind(this);
-      this.selectLanguage = this.selectLanguage.bind(this);
     }
 
     componentWillMount = () => {
@@ -54,41 +52,71 @@ function LocaleWrapper(WrapperComponent) {
           });
         }
       }
+      if (event.type === 'DeepLink') {
+        const parts = event.link.split('/');
+        // const payload = event.payload;
+        if (parts[0] === 'tab') {
+          let tabIndex;
+          switch (parts[1]) {
+            case 'mdp.HomeScreen':
+              tabIndex = 0;
+              break;
+            case 'mdp.MyBenefitsScreen':
+              tabIndex = 1;
+              break;
+            case 'mdp.DigitalCardScreen':
+              tabIndex = 2;
+              break;
+            case 'mdp.MemberResourceScreen':
+              tabIndex = 3;
+              break;
+            case 'mdp.AlertsScreen':
+              tabIndex = 4;
+              break;
+
+            default:
+              tabIndex = 0;
+              break;
+          }
+          this.props.navigator.switchToTab({
+            tabIndex,
+          });
+          // handle the link somehow, usually run a this.props.navigator command
+        }
+      }
     }
 
-    setButton = (title) => {
-      this.props.navigator.setButtons({
-        rightButtons: [
-          {
-            id: 'locale',
-            title: title.toUpperCase(),
-            buttonColor: 'green',
-            buttonFontSize: 14,
-            buttonFontWeight: '600',
+    setButton = (locale) => {
+      const icon = locale.toLowerCase() === 'es' ? ESIcon : ENIcon;
+      let button = {};
+      if (Platform.OS === 'ios') {
+        button = {
+          id: 'locale',
+          component: 'mdp.FlagIcon',
+          passProps: {
+            locale,
           },
-        ],
+        };
+      } else {
+        button = {
+          id: 'locale',
+          icon,
+        };
+      }
+
+      this.props.navigator.setButtons({
+        rightButtons: [button],
       });
     };
 
     openLocaleSelect = () => {
       this.props.navigator.showLightBox({
         screen: 'mdp.LanguageSelect',
-        passProps: {
-          currentLocale: this.props.locale,
-          languages: config.locale,
-          onSelect: this.selectLanguage,
-        },
         style: {
           backgroundBlur: 'dark',
         },
         adjustSoftInput: 'resize',
       });
-    };
-
-    selectLanguage = (locale) => {
-      this.props.navigator.dismissLightBox();
-      this.props.changeLocale(locale);
-      I18n.locale = locale;
     };
 
     render() {
@@ -103,11 +131,7 @@ function LocaleWrapper(WrapperComponent) {
     };
   };
 
-  const mapDispatchToProps = dispatch => ({
-    changeLocale: (locale) => {
-      dispatch(changeLocale(locale));
-    },
-  });
+  const mapDispatchToProps = () => ({});
 
   return connect(mapStateToProps, mapDispatchToProps)(LocaleFilter);
 }

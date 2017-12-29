@@ -25,18 +25,18 @@ const homePersistConfig = {
   blacklist: ['loading', 'error'],
 };
 
-// const authPersistConfig = {
-//   key: 'auth',
-//   storage,
-//   blacklist: ['loading', 'error'],
-// };
+const authPersistConfig = {
+  key: 'auth',
+  storage,
+  blacklist: ['loading', 'error'],
+};
 
 export default combineReducers({
   form,
   app,
   locale,
   pin: persistReducer(pinPersistConfig, pin),
-  auth, // : persistReducer(authPersistConfig, auth),
+  auth: persistReducer(authPersistConfig, auth),
   home: persistReducer(homePersistConfig, home),
   checkUser,
   register,
