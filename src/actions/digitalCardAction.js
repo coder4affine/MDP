@@ -10,6 +10,10 @@ export function getGroupMember(token) {
     return Api.jsonService(`${config.serviceApi}MDP/api/cards/getGroupMember`, 'get', null, token)
       .then((result) => {
         dispatch(Action(types.LOAD_DIGITAL_CARD_SUCCESS, result.Payload.data));
+        if (result.Payload.data) {
+          dispatch(Action(types.SET_USER, result.Payload.data[0]));
+          dispatch(Action(types.CARD_CHANGED, result.Payload.data[0]));
+        }
       })
       .catch((error) => {
         dispatch(Action(types.LOAD_DIGITAL_CARD_FAIL, error.response._bodyText)); // eslint-disable-line

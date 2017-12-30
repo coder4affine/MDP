@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, TouchableHighlight } from 'react-native';
+import { View, Text, TouchableHighlight, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from '../commonStyle';
@@ -48,6 +48,15 @@ const menu = [
 ];
 
 class SideMenu extends Component {
+  static propTypes = {
+    navigator: PropTypes.object.isRequired,
+    user: PropTypes.object,
+  };
+
+  static defaultProps = {
+    user: null,
+  };
+
   constructor(props) {
     super(props);
 
@@ -73,6 +82,7 @@ class SideMenu extends Component {
   }
 
   render() {
+    const { user } = this.props;
     return (
       <View
         style={{
@@ -80,7 +90,20 @@ class SideMenu extends Component {
           backgroundColor: '#ffffff',
         }}
       >
-        <View style={{ height: 150, backgroundColor: 'red' }} />
+        <View
+          style={{
+            height: 150,
+            backgroundColor: 'green',
+            borderBottomWidth: StyleSheet.hairlineWidth,
+          }}
+        >
+          {user && (
+            <View style={{ flex: 1, justifyContent: 'flex-end', padding: 10 }}>
+              <Text>Hello,</Text>
+              <Text>{`${user.FirstName} ${user.LastName}`}</Text>
+            </View>
+          )}
+        </View>
         {menu.map(item => (
           <TouchableHighlight
             key={item.id}
@@ -98,4 +121,8 @@ class SideMenu extends Component {
   }
 }
 
-export default connect()(SideMenu);
+const mapStateToProps = state => ({
+  user: state.user.user,
+});
+
+export default connect(mapStateToProps)(SideMenu);

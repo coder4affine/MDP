@@ -7,7 +7,6 @@ import {
   Animated,
   Keyboard,
   KeyboardAvoidingView,
-  StyleSheet,
   Dimensions,
   TouchableHighlight,
   Platform,

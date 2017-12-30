@@ -52,7 +52,7 @@ const DigitalCard = ({ locale, groupMember }) => {
           </ImageBackground>
         </ElevatedView>
       </View>
-      <View style={{ alignItems: 'center', margin: 16 }}>
+      <View style={{ alignItems: 'center', marginBottom: 8 }}>
         <ElevatedView elevation={3} style={{ borderRadius: 5 }}>
           <ImageBackground borderRadius={5} style={{ width: 288, height: 186 }} source={CardBack}>
             <View style={{ position: 'absolute', top: 12, left: 60 }}>

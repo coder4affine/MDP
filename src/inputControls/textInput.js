@@ -15,6 +15,19 @@ const styles = StyleSheet.create({
       },
     }),
   },
+  textIcon: {
+    position: 'absolute',
+    ...Platform.select({
+      ios: {
+        right: 10,
+        bottom: 2,
+      },
+      android: {
+        right: 14,
+        bottom: 14,
+      },
+    }),
+  },
   inputContainer: {
     borderBottomWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.4)',
@@ -77,7 +90,7 @@ class InputText extends Component {
         />
         {password && (
           <TouchableHighlight
-            style={{ position: 'absolute', right: 12, top: 2 }}
+            style={styles.textIcon}
             underlayColor="white"
             onPress={() => this.setState({ passwordToggle: !this.state.passwordToggle })}
           >

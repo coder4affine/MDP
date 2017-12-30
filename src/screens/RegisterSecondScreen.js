@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { SubmissionError, reset } from 'redux-form';
-import moment from 'moment';
+import { SubmissionError } from 'redux-form';
 
 import { MAIN } from '../constants/actionTypes';
 import { changeAppRoot } from '../actions/app';

@@ -13,6 +13,7 @@ import RegisterSecondScreen from './RegisterSecondScreen';
 import SideMenu from './SideMenu';
 import ErrorScreen from './ErrorScreen';
 import NeedHelpScreen from './NeedHelpScreen';
+import SelectCardScreen from './SelectCardScreen';
 import LanguageSelect from '../components/LanguageSelect';
 import FlagIcon from '../components/FlagIcon';
 
@@ -44,6 +45,7 @@ export function registerScreens(store, Provider) {
   );
   Navigation.registerComponent('mdp.SideMenu', () => SideMenu, store, Provider);
   Navigation.registerComponent('mdp.NeedHelpScreen', () => NeedHelpScreen, store, Provider);
+  Navigation.registerComponent('mdp.SelectCardScreen', () => SelectCardScreen, store, Provider);
   Navigation.registerComponent('mdp.ErrorScreen', () => ErrorScreen, store, Provider);
   Navigation.registerComponent('mdp.LanguageSelect', () => LanguageSelect, store, Provider);
   Navigation.registerComponent('mdp.FlagIcon', () => FlagIcon);

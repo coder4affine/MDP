@@ -31,6 +31,19 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.4)',
     marginTop: 20,
   },
+  textIcon: {
+    position: 'absolute',
+    ...Platform.select({
+      ios: {
+        right: 10,
+        bottom: 2,
+      },
+      android: {
+        right: 14,
+        bottom: 14,
+      },
+    }),
+  },
   valid: {
     ...Platform.select({
       ios: {
@@ -77,8 +90,8 @@ class InputText extends Component {
 
   componentWillReceiveProps = (nextProps) => {
     if (this.props.input.value !== nextProps.input.value) {
-      if (moment(nextProps.input.value, 'L').isValid()) {
-        this.setState({ pickerDate: moment(nextProps.input.value).toDate() });
+      if (moment(nextProps.input.value, 'L', true).isValid()) {
+        this.setState({ pickerDate: moment(nextProps.input.value, 'L').toDate() });
       }
     }
   };
@@ -105,7 +118,7 @@ class InputText extends Component {
           .year(year)
           .month(month)
           .date(day)
-          .toDate();
+          .toISOString();
         this.selectDate(date);
       }
     } catch ({ code, message }) {
@@ -115,7 +128,9 @@ class InputText extends Component {
 
   selectDate(date) {
     this.props.input.onChange(moment(date).format('L'));
-    this.setState({ showModal: false });
+    setTimeout(() => {
+      this.setState({ showModal: false });
+    }, 0);
   }
 
   render() {
@@ -142,7 +157,7 @@ class InputText extends Component {
         />
 
         <TouchableHighlight
-          style={{ position: 'absolute', right: 12, top: 2 }}
+          style={styles.textIcon}
           underlayColor="white"
           onPress={this.openPicker}
         >
@@ -150,42 +165,43 @@ class InputText extends Component {
         </TouchableHighlight>
 
         {meta.error && !valid && <Text style={styles.error}>{meta.error}</Text>}
-        {OS === 'ios' && (
-          <Modal visible={showModal} animationType="slide" transparent onRequestClose={() => null}>
-            <View style={styles.flexEnd}>
-              <View style={{ backgroundColor: '#FAFAFA' }}>
-                <View style={styles.spaceBW}>
-                  <TouchableHighlight
-                    onPress={() => this.setState({ showModal: !showModal })}
-                    underlayColor="#D3D3D3"
-                  >
-                    <Text style={styles.text}>Cancel</Text>
-                  </TouchableHighlight>
-                  <TouchableHighlight
-                    onPress={() => this.selectDate(pickerDate)}
-                    underlayColor="#D3D3D3"
-                  >
-                    <Text style={styles.text}>Done</Text>
-                  </TouchableHighlight>
+        {OS === 'ios' &&
+          showModal && (
+            <Modal visible animationType="slide" transparent onRequestClose={() => null}>
+              <View style={styles.flexEnd}>
+                <View style={{ backgroundColor: '#FAFAFA' }}>
+                  <View style={styles.spaceBW}>
+                    <TouchableHighlight
+                      onPress={() => this.setState({ showModal: !showModal })}
+                      underlayColor="#D3D3D3"
+                    >
+                      <Text style={styles.text}>Cancel</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                      onPress={() => this.selectDate(pickerDate)}
+                      underlayColor="#D3D3D3"
+                    >
+                      <Text style={styles.text}>Done</Text>
+                    </TouchableHighlight>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomWidth: StyleSheet.hairlineWidth,
+                      borderBottomColor: '#D3D3D3',
+                    }}
+                  />
+                  <DatePickerIOS
+                    mode="date"
+                    date={pickerDate}
+                    ref={(dateInput) => {
+                      this.dateInput = dateInput;
+                    }}
+                    onDateChange={nd => this.setState({ pickerDate: nd })}
+                  />
                 </View>
-                <View
-                  style={{
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                    borderBottomColor: '#D3D3D3',
-                  }}
-                />
-                <DatePickerIOS
-                  mode="date"
-                  date={pickerDate}
-                  ref={(dateInput) => {
-                    this.dateInput = dateInput;
-                  }}
-                  onDateChange={nd => this.setState({ pickerDate: nd })}
-                />
               </View>
-            </View>
-          </Modal>
-        )}
+            </Modal>
+          )}
       </View>
     );
   }

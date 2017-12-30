@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, WebView } from 'react-native';
+import { RefreshControl, WebView, ScrollView, Dimensions } from 'react-native';
 import { bindActionCreators } from 'redux';
 import * as homeAction from '../actions/homeAction';
 import LocaleWrapper from '../HOC/LocaleWrapper';
+
+const { height } = Dimensions.get('window');
 
 export class Home extends Component {
   static propTypes = {
@@ -16,10 +18,20 @@ export class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      loading: false,
+    };
+    this.loadHome = this.loadHome.bind(this);
   }
   componentWillMount() {
     this.props.actions.loadHome();
+  }
+
+  loadHome() {
+    this.setState({ loading: true });
+    this.props.actions.loadHome().then(() => {
+      this.setState({ loading: false });
+    });
   }
 
   render() {
@@ -28,11 +40,11 @@ export class Home extends Component {
     if (home.data) {
       html = home.data[locale];
     }
-
+    const { loading } = this.state;
     return (
-      <View style={{ flex: 1 }}>
-        <WebView source={{ html }} style={{ marginTop: 20 }} />
-      </View>
+      <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={this.getCard} />}>
+        <WebView source={{ html }} style={{ height: height - 120 }} />
+      </ScrollView>
     );
   }
 }

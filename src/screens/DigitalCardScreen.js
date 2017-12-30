@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { ScrollView, RefreshControl } from 'react-native';
+import { ScrollView, RefreshControl, View, Text } from 'react-native';
 import moment from 'moment';
 import DigitalCard from '../components/DigitalCard';
+import ElevatedView from '../components/ElevatedView';
+import Button from '../inputControls/button';
 
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import * as digitalCardAction from '../actions/digitalCardAction';
@@ -12,11 +14,18 @@ import * as authAction from '../actions/authAction';
 
 export class DigitalCardScreen extends Component {
   static propTypes = {
-    digitalCard: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     authAction: PropTypes.object.isRequired,
     locale: PropTypes.string.isRequired,
+    navigator: PropTypes.object.isRequired,
+    card: PropTypes.object,
+    user: PropTypes.object,
+  };
+
+  static defaultProps = {
+    card: null,
+    user: null,
   };
 
   constructor(props) {
@@ -26,6 +35,7 @@ export class DigitalCardScreen extends Component {
       loading: false,
     };
     this.getCard = this.getCard.bind(this);
+    this.selectCard = this.selectCard.bind(this);
   }
 
   componentWillMount() {
@@ -54,22 +64,52 @@ export class DigitalCardScreen extends Component {
     }
   }
 
+  selectCard() {
+    this.props.navigator.push({
+      screen: 'mdp.SelectCardScreen',
+      title: 'Select Card',
+      navigatorStyle: {
+        screenBackgroundColor: 'white',
+        tabBarHidden: true,
+      },
+    });
+  }
+
   render() {
-    const { data } = this.props.digitalCard;
     const { loading } = this.state;
-    const { locale } = this.props;
+    const { locale, card, user } = this.props;
     return (
       <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={this.getCard} />}>
-        {data && locale && <DigitalCard locale={locale} groupMember={data[0]} />}
+        {card &&
+          locale && (
+            <View style={{ alignItems: 'center', margin: 10 }}>
+              <Text>My Card</Text>
+              <DigitalCard locale={locale} groupMember={card} />
+              <View style={{ marginVertical: 10 }}>
+                <ElevatedView elevation={2} style={{ width: 288 }}>
+                  <Button text="Family Member Card" onPress={this.selectCard} />
+                </ElevatedView>
+              </View>
+              {user &&
+                card.MemberID !== user.MemberID && (
+                  <View>
+                    <ElevatedView elevation={2} style={{ width: 288 }}>
+                      <Button text="My Card" onPress={() => alert('my card')} />
+                    </ElevatedView>
+                  </View>
+                )}
+            </View>
+          )}
       </ScrollView>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  digitalCard: state.digitalCard,
   auth: state.auth,
   locale: state.locale.locale,
+  card: state.card.card,
+  user: state.user.user,
 });
 
 const mapDispatchToProps = dispatch => ({

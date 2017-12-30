@@ -1,5 +1,7 @@
 export const ROOT_CHANGED = 'ROOT_CHANGED';
 export const LANGUAGE_CHANGED = 'LANGUAGE_CHANGED';
+export const CARD_CHANGED = 'CARD_CHANGED';
+export const SET_USER = 'SET_USER';
 
 export const LOAD_PIN = 'LOAD_PIN';
 export const LOAD_PIN_SUCCESS = 'LOAD_PIN_SUCCESS';

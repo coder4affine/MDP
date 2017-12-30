@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { View, Text, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import moment from 'moment';
 
 import LocaleWrapper from '../HOC/LocaleWrapper';
@@ -75,6 +75,7 @@ export class AlertsScreen extends Component {
             data={data}
             renderItem={({ item }) => <Alerts item={item} />}
             keyExtractor={item => item.MemberAlertKey}
+            ItemSeparatorComponent={() => <View style={{ borderTopWidth: StyleSheet.hairlineWidth }} />}
             refreshing={loading}
             onRefresh={this.getAlerts}
           />

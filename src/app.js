@@ -74,8 +74,8 @@ export default class App {
             label: 'My Benefits',
             screen: 'mdp.MyBenefitsScreen',
             title: 'My Benefits',
-            icon: iconsMap['ios-medkit'],
-            selectedIcon: iconsMap['ios-medkit-outline'],
+            icon: iconsMap['ios-medkit-outline'],
+            selectedIcon: iconsMap['ios-medkit'],
             navigatorButtons: {
               leftButtons: [
                 {

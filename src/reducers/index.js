@@ -13,9 +13,21 @@ import register from './registerReducer';
 import digitalCard from './digitalCardReducer';
 import memberResource from './memberResourceReducer';
 import alerts from './alertsReducer';
+import card from './cardReducer';
+import user from './userReducer';
 
 const pinPersistConfig = {
   key: 'pin',
+  storage,
+};
+
+const cardPersistConfig = {
+  key: 'card',
+  storage,
+};
+
+const userersistConfig = {
+  key: 'user',
   storage,
 };
 
@@ -55,6 +67,8 @@ export default combineReducers({
   locale,
   checkUser,
   register,
+  user: persistReducer(cardPersistConfig, user),
+  card: persistReducer(cardPersistConfig, card),
   pin: persistReducer(pinPersistConfig, pin),
   auth: persistReducer(authPersistConfig, auth),
   home: persistReducer(homePersistConfig, home),
