@@ -8,11 +8,14 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case types.CARD_CHANGED:
-      return {
-        ...state,
-        card: action.payload,
-        savedCard: [...new Set([...state.savedCard, action.payload.MemberID])],
-      };
+      if (action.payload) {
+        return {
+          ...state,
+          card: action.payload,
+          savedCard: [...new Set([...state.savedCard, action.payload.MemberID])],
+        };
+      }
+      return initialState;
 
     default:
       return state;

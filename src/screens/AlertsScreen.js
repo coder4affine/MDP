@@ -34,7 +34,10 @@ export class AlertsScreen extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (JSON.stringify(this.props.alerts.data) !== JSON.stringify(nextProps.alerts.data)) {
+    if (
+      nextProps.alerts.data &&
+      JSON.stringify(this.props.alerts.data) !== JSON.stringify(nextProps.alerts.data)
+    ) {
       const badgeCount = nextProps.alerts.data.filter(item => item.Status !== 'R');
       this.props.navigator.setTabBadge({
         tabIndex: 4,
@@ -75,7 +78,9 @@ export class AlertsScreen extends Component {
             data={data}
             renderItem={({ item }) => <Alerts item={item} />}
             keyExtractor={item => item.MemberAlertKey}
-            ItemSeparatorComponent={() => <View style={{ borderTopWidth: StyleSheet.hairlineWidth }} />}
+            ItemSeparatorComponent={() => (
+              <View style={{ borderTopWidth: StyleSheet.hairlineWidth }} />
+            )}
             refreshing={loading}
             onRefresh={this.getAlerts}
           />

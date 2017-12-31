@@ -1,5 +1,6 @@
 import moment from 'moment';
 import * as types from '../constants/actionTypes';
+import { changeAppRoot } from './app';
 import Api, { Action } from '../utils/apiUtil';
 import config from '../config';
 
@@ -62,5 +63,18 @@ export function register(data) {
       .catch((error) => {
         dispatch(Action(types.REGISTER_FAIL, error.response._bodyText)); // eslint-disable-line
       });
+  };
+}
+
+export function logout() {
+  return (dispatch) => {
+    dispatch(changeAppRoot(types.LOGIN));
+    dispatch(Action(types.SET_USER, null));
+    dispatch(Action(types.CARD_CHANGED, null));
+    dispatch(Action(types.LOGIN_SUCCESS, null));
+    dispatch(Action(types.HOME_SUCCESS, null));
+    dispatch(Action(types.LOAD_DIGITAL_CARD_SUCCESS, null));
+    dispatch(Action(types.LOAD_MEMBER_RESOURCE_SUCCESS, null));
+    dispatch(Action(types.LOAD_ALERTS_SUCCESS, null));
   };
 }

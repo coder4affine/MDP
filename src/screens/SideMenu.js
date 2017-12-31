@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { View, Text, TouchableHighlight, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { logout } from '../actions/authAction';
 import styles from '../commonStyle';
 
 import I18n from '../i18n';
@@ -44,12 +45,18 @@ const menu = [
     icon: 'md-chatbubbles',
     link: 'push/mdp.NeedHelpScreen',
   },
-  { id: 6, title: 'Logout', icon: 'ios-power' },
+  {
+    id: 6,
+    title: 'Logout',
+    icon: 'ios-power',
+    link: 'logout',
+  },
 ];
 
 class SideMenu extends Component {
   static propTypes = {
     navigator: PropTypes.object.isRequired,
+    logout: PropTypes.func.isRequired,
     user: PropTypes.object,
   };
 
@@ -75,10 +82,14 @@ class SideMenu extends Component {
   }
 
   menuPress(link) {
-    this.toggleDrawer();
-    this.props.navigator.handleDeepLink({
-      link,
-    });
+    if (link === 'logout') {
+      this.props.logout();
+    } else {
+      this.toggleDrawer();
+      this.props.navigator.handleDeepLink({
+        link,
+      });
+    }
   }
 
   render() {
@@ -125,4 +136,10 @@ const mapStateToProps = state => ({
   user: state.user.user,
 });
 
-export default connect(mapStateToProps)(SideMenu);
+const mapDispatchToProps = dispatch => ({
+  logout: () => {
+    dispatch(logout());
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SideMenu);
