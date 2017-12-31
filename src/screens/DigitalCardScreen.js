@@ -11,6 +11,11 @@ import Button from '../inputControls/button';
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import * as digitalCardAction from '../actions/digitalCardAction';
 import * as authAction from '../actions/authAction';
+import { CARD_CHANGED } from '../constants/actionTypes';
+
+function cardChange(card) {
+  return { type: CARD_CHANGED, payload: card };
+}
 
 export class DigitalCardScreen extends Component {
   static propTypes = {
@@ -19,6 +24,7 @@ export class DigitalCardScreen extends Component {
     authAction: PropTypes.object.isRequired,
     locale: PropTypes.string.isRequired,
     navigator: PropTypes.object.isRequired,
+    cardChange: PropTypes.func.isRequired,
     card: PropTypes.object,
     user: PropTypes.object,
   };
@@ -36,6 +42,7 @@ export class DigitalCardScreen extends Component {
     };
     this.getCard = this.getCard.bind(this);
     this.selectCard = this.selectCard.bind(this);
+    this.showMyCard = this.showMyCard.bind(this);
   }
 
   componentWillMount() {
@@ -75,6 +82,10 @@ export class DigitalCardScreen extends Component {
     });
   }
 
+  showMyCard() {
+    this.props.cardChange(this.props.user);
+  }
+
   render() {
     const { loading } = this.state;
     const { locale, card, user } = this.props;
@@ -83,7 +94,7 @@ export class DigitalCardScreen extends Component {
         {card &&
           locale && (
             <View style={{ alignItems: 'center', margin: 10 }}>
-              <Text>My Card</Text>
+              <Text>{`${card.FirstName} ${card.LastName}'s Card`}</Text>
               <DigitalCard locale={locale} groupMember={card} />
               <View style={{ marginVertical: 10 }}>
                 <ElevatedView elevation={2} style={{ width: 288 }}>
@@ -94,10 +105,16 @@ export class DigitalCardScreen extends Component {
                 card.MemberID !== user.MemberID && (
                   <View>
                     <ElevatedView elevation={2} style={{ width: 288 }}>
-                      <Button text="My Card" onPress={() => alert('my card')} />
+                      <Button text="My Card" onPress={this.showMyCard} />
                     </ElevatedView>
                   </View>
                 )}
+              {user && (
+                <View>
+                  <Text>Card last downloaded on</Text>
+                  <Text>{moment(user.cardDownLoadDate).format('LLLL')}</Text>
+                </View>
+              )}
             </View>
           )}
       </ScrollView>
@@ -115,6 +132,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(digitalCardAction, dispatch),
   authAction: bindActionCreators(authAction, dispatch),
+  cardChange: (card) => {
+    dispatch(cardChange(card));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(DigitalCardScreen, 'digitalCard'));

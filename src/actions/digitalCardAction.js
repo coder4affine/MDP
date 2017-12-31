@@ -9,9 +9,10 @@ export function getGroupMember(token) {
     dispatch(Action(types.LOAD_DIGITAL_CARD));
     return Api.jsonService(`${config.serviceApi}MDP/api/cards/getGroupMember`, 'get', null, token)
       .then((result) => {
-        dispatch(Action(types.LOAD_DIGITAL_CARD_SUCCESS, result.Payload.data));
+        const cardDownLoadDate = moment().toDate();
         if (result.Payload.data) {
-          dispatch(Action(types.SET_USER, result.Payload.data[0]));
+          dispatch(Action(types.LOAD_DIGITAL_CARD_SUCCESS, result.Payload.data));
+          dispatch(Action(types.SET_USER, { ...result.Payload.data[0], cardDownLoadDate }));
           dispatch(Action(types.CARD_CHANGED, result.Payload.data[0]));
         }
       })

@@ -11,21 +11,17 @@ export default (state = initialState, action) => {
     case types.HOME_REQUEST:
       return {
         ...state,
-        data: [],
-        error: false,
         loading: true,
       };
     case types.HOME_SUCCESS:
       return {
         ...state,
-        error: false,
         loading: false,
         data: action.payload,
       };
     case types.HOME_FAIL:
       return {
         ...state,
-        data: null,
         loading: false,
         error: action.payload,
       };

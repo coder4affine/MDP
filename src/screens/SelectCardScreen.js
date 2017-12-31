@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, Text, TouchableHighlight } from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
+import { SubmissionError, reset } from 'redux-form';
+import moment from 'moment';
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import DateForm from '../components/DateForm';
 import Button from '../inputControls/button';
@@ -17,6 +19,7 @@ export class SelectCardScreen extends Component {
     digitalCard: PropTypes.object.isRequired,
     savedCard: PropTypes.array.isRequired,
     cardChange: PropTypes.func.isRequired,
+    resetForm: PropTypes.func.isRequired,
   };
   constructor(props) {
     super(props);
@@ -36,7 +39,18 @@ export class SelectCardScreen extends Component {
   }
 
   dateFormSubmit(value) {
-    const { selectedCard } = this.state;
+    return new Promise((resolve) => {
+      const { selectedCard } = this.state;
+      if (moment(selectedCard.BirthDate).isSame(moment(value.BirthDate, 'L'), 'day')) {
+        this.generateCard();
+        resolve();
+      } else {
+        this.props.resetForm();
+        throw new SubmissionError({
+          _error: 'BirthDate not valid',
+        });
+      }
+    });
   }
 
   generateCard() {
@@ -68,7 +82,9 @@ export class SelectCardScreen extends Component {
                 }
                 size={24}
               />
-              <Text style={{ paddingHorizontal: 10 }}>{`${item.FirstName} ${item.LastName}`}</Text>
+              <Text style={{ paddingHorizontal: 10 }}>
+                {`${item.FirstName} ${item.LastName} ${item.BirthDate}`}
+              </Text>
             </View>
           </TouchableHighlight>
         ))}
@@ -92,6 +108,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   cardChange: (card) => {
     dispatch(cardChange(card));
+  },
+  resetForm: () => {
+    dispatch(reset('dateSelect'));
   },
 });
 

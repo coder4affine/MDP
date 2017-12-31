@@ -56,7 +56,9 @@ const DigitalCard = ({ locale, groupMember }) => {
         <ElevatedView elevation={3} style={{ borderRadius: 5 }}>
           <ImageBackground borderRadius={5} style={{ width: 288, height: 186 }} source={CardBack}>
             <View style={{ position: 'absolute', top: 12, left: 60 }}>
-              <Barcode height={30} width={1.5} value={groupMember.MemberID} format="CODE128" />
+              {!!groupMember.MemberID && (
+                <Barcode height={30} width={1.5} value={groupMember.MemberID} format="CODE128" />
+              )}
             </View>
           </ImageBackground>
         </ElevatedView>
