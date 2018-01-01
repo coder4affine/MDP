@@ -17,7 +17,7 @@ export class MyBenefitScreen extends Component {
     auth: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     authAction: PropTypes.object.isRequired,
-    locale: PropTypes.string.isRequired,
+    // locale: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -58,7 +58,7 @@ export class MyBenefitScreen extends Component {
   render() {
     const { data } = this.props.digitalCard;
     const { loading } = this.state;
-    const { locale } = this.props;
+    // const { locale } = this.props;
     return (
       <View style={{ flex: 1 }}>
         <FlatList
@@ -80,7 +80,7 @@ export class MyBenefitScreen extends Component {
 const mapStateToProps = state => ({
   digitalCard: state.digitalCard,
   auth: state.auth,
-  locale: state.locale.locale,
+  // locale: state.locale.locale,
 });
 
 const mapDispatchToProps = dispatch => ({

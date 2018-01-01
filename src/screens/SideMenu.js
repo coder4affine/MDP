@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, TouchableHighlight, StyleSheet } from 'react-native';
+import { View, Text, TouchableHighlight, StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Navigation } from 'react-native-navigation';
+// import { Navigation } from 'react-native-navigation';
 import { logout } from '../actions/authAction';
-import styles from '../commonStyle';
+// import styles from '../commonStyle';
 
-import I18n from '../i18n';
+// import I18n from '../i18n';
 
 const menu = [
   {
@@ -42,7 +42,7 @@ const menu = [
   },
   {
     id: 5,
-    title: 'Chat',
+    title: 'Need Help?',
     icon: 'md-chatbubbles',
     link: 'modal',
   },
@@ -87,15 +87,19 @@ class SideMenu extends Component {
     if (link === 'logout') {
       this.props.logout();
     } else if (link === 'modal') {
+      const navigatorButtons =
+        Platform.OS === 'ios'
+          ? {
+            leftButtons: [{ title: 'Cancel', id: 'closeModal' }],
+          }
+          : {};
       this.props.navigator.showModal({
         screen: 'mdp.NeedHelpScreen',
         title: 'Need Help',
         navigatorStyle: {
           screenBackgroundColor: 'white',
         },
-        navigatorButtons: {
-          leftButtons: [{ title: 'Cancel', id: 'closeModal' }],
-        },
+        navigatorButtons,
       });
     } else {
       this.props.navigator.handleDeepLink({

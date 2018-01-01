@@ -6,18 +6,19 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import moment from 'moment';
 import HelpButton from '../components/HelpButton';
 import LocaleWrapper from '../HOC/LocaleWrapper';
-import I18n from '../i18n';
+// import I18n from '../i18n';
 import * as alertsAction from '../actions/alertsAction';
 import * as authAction from '../actions/authAction';
 
-import Alerts from '../components/Alerts';
+import Alert from '../components/Alerts';
 
-export class AlertsScreen extends Component {
+export class Alerts extends Component {
   static propTypes = {
     alerts: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     authAction: PropTypes.object.isRequired,
+    navigator: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -76,7 +77,7 @@ export class AlertsScreen extends Component {
         {data && (
           <FlatList
             data={data}
-            renderItem={({ item }) => <Alerts item={item} />}
+            renderItem={({ item }) => <Alert item={item} />}
             keyExtractor={item => item.MemberAlertKey}
             ItemSeparatorComponent={() => (
               <View style={{ borderTopWidth: StyleSheet.hairlineWidth }} />
@@ -101,4 +102,4 @@ const mapDispatchToProps = dispatch => ({
   authAction: bindActionCreators(authAction, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(AlertsScreen));
+export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(Alerts));

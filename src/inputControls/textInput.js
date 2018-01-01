@@ -119,11 +119,13 @@ InputText.propTypes = {
   }).isRequired,
   password: PropTypes.bool,
   date: PropTypes.bool,
+  inputRef: PropTypes.func,
 };
 
 InputText.defaultProps = {
   password: false,
   date: false,
+  inputRef: () => {},
 };
 
 export default InputText;

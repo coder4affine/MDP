@@ -51,7 +51,7 @@ const RegisterFirst = ({
   pristine, handleSubmit, submitting, error,
 }) => (
   <ScrollView keyboardShouldPersistTaps="handled">
-    <View style={{ margin: 10 }}>{error && <Text>{error}</Text>}</View>
+    <View style={{ margin: 10 }}>{!!error && <Text>{error}</Text>}</View>
     <View style={{ margin: 10 }}>
       <Text style={commonStyle.text}>First Name</Text>
       <Field
@@ -153,6 +153,11 @@ RegisterFirst.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+};
+
+RegisterFirst.defaultProps = {
+  error: '',
 };
 
 export default reduxForm({

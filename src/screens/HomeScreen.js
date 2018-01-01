@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { RefreshControl, WebView, ScrollView, Dimensions } from 'react-native';
+import { RefreshControl, WebView, ScrollView, Dimensions, View } from 'react-native';
 import { bindActionCreators } from 'redux';
 import * as homeAction from '../actions/homeAction';
 import LocaleWrapper from '../HOC/LocaleWrapper';
@@ -43,13 +43,15 @@ export class Home extends Component {
     }
     const { loading } = this.state;
     return (
-      <ScrollView
-        style={{ flex: 1 }}
-        refreshControl={<RefreshControl refreshing={loading} onRefresh={this.getCard} />}
-      >
-        <WebView source={{ html }} style={{ height: height - 120 }} />
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          style={{ flex: 1 }}
+          refreshControl={<RefreshControl refreshing={loading} onRefresh={this.getCard} />}
+        >
+          <WebView source={{ html }} style={{ height: height - 120 }} />
+        </ScrollView>
         <HelpButton />
-      </ScrollView>
+      </View>
     );
   }
 }

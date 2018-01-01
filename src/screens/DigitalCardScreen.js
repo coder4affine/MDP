@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ScrollView, RefreshControl, View, Text } from 'react-native';
 import moment from 'moment';
-import DigitalCard from '../components/DigitalCard';
+import Card from '../components/DigitalCard';
 import ElevatedView from '../components/ElevatedView';
 import Button from '../inputControls/button';
 import HelpButton from '../components/HelpButton';
@@ -18,7 +18,7 @@ function cardChange(card) {
   return { type: CARD_CHANGED, payload: card };
 }
 
-export class DigitalCardScreen extends Component {
+export class DigitalCard extends Component {
   static propTypes = {
     auth: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
@@ -100,16 +100,16 @@ export class DigitalCardScreen extends Component {
             locale && (
               <View style={{ alignItems: 'center', margin: 10 }}>
                 <Text>{`${card.FirstName} ${card.LastName}'s Card`}</Text>
-                <DigitalCard locale={locale} groupMember={card} />
+                <Card locale={locale} groupMember={card} />
                 <View style={{ marginVertical: 10 }}>
-                  <ElevatedView elevation={2} style={{ width: 288 }}>
+                  <ElevatedView elevation={2} style={{ width: 288, borderRadius: 4 }}>
                     <Button text="Family Member Card" onPress={this.selectCard} />
                   </ElevatedView>
                 </View>
                 {user &&
                   card.MemberID !== user.MemberID && (
                     <View>
-                      <ElevatedView elevation={2} style={{ width: 288 }}>
+                      <ElevatedView elevation={2} style={{ width: 288, borderRadius: 4 }}>
                         <Button text="My Card" onPress={this.showMyCard} />
                       </ElevatedView>
                     </View>
@@ -144,4 +144,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(DigitalCardScreen, 'digitalCard'));
+export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(DigitalCard, 'digitalCard'));

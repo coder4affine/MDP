@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Image, TouchableHighlight } from 'react-native';
+import { Image, TouchableHighlight } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 
 import ENIcon from '../../images/countryFlags/en.png';

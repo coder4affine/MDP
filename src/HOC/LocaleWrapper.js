@@ -11,7 +11,12 @@ function LocaleWrapper(WrapperComponent, name = '') {
   class LocaleFilter extends Component {
     static propTypes = {
       locale: PropTypes.string.isRequired,
+      card: PropTypes.object,
       navigator: PropTypes.object.isRequired,
+    };
+
+    static defaultProps = {
+      card: null,
     };
 
     constructor(props) {
@@ -136,16 +141,19 @@ function LocaleWrapper(WrapperComponent, name = '') {
     };
 
     openShare() {
-      Share.share(
-        {
-          message: "BAM: we're helping your business with awesome React Native apps",
-          url: 'http://bam.tech',
-          title: 'Wow, did you see that?',
-        },
-        {
-          dialogTitle: 'Share BAM goodness',
-        },
-      );
+      const { card } = this.props;
+      if (card) {
+        Share.share(
+          {
+            message: `I am sharing digital card of ${card.FirstName} ${card.LastName}`,
+            url: 'http://bam.tech',
+            title: 'Share Digital Card',
+          },
+          {
+            dialogTitle: 'Share Digital Card',
+          },
+        );
+      }
     }
 
     render() {
@@ -157,6 +165,7 @@ function LocaleWrapper(WrapperComponent, name = '') {
     const { locale } = state.locale;
     return {
       locale,
+      card: state.card.card,
     };
   };
 

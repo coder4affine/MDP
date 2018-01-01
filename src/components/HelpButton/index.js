@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+// import PropTypes from 'prop-types';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 
 const styles = StyleSheet.create({
@@ -13,33 +13,27 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class HelpButton extends Component {
-  constructor(props) {
-    super(props);
-
-    this.openHelp = this.openHelp.bind(this);
-  }
-
-  openHelp() {
-    Navigation.showModal({
-      screen: 'mdp.NeedHelpScreen',
-      title: 'Need Help',
-      navigatorStyle: {
-        screenBackgroundColor: 'white',
-      },
-      navigatorButtons: {
+const openHelp = () => {
+  const navigatorButtons =
+    Platform.OS === 'ios'
+      ? {
         leftButtons: [{ title: 'Cancel', id: 'closeModal' }],
-      },
-    });
-  }
+      }
+      : {};
+  Navigation.showModal({
+    screen: 'mdp.NeedHelpScreen',
+    title: 'Need Help',
+    navigatorStyle: {
+      screenBackgroundColor: 'white',
+    },
+    navigatorButtons,
+  });
+};
 
-  render() {
-    return (
-      <ActionButton
-        buttonColor="rgba(231,76,60,1)"
-        icon={<Icon name="md-chatboxes" style={styles.actionButtonIcon} />}
-        onPress={this.openHelp}
-      />
-    );
-  }
-}
+export default () => (
+  <ActionButton
+    buttonColor="rgba(231,76,60,1)"
+    icon={<Icon name="md-chatboxes" style={styles.actionButtonIcon} />}
+    onPress={() => openHelp()}
+  />
+);

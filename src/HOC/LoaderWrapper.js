@@ -24,10 +24,9 @@ Navigation.registerComponent('mdp.Loader', () => Loader);
 export default (Comp: any) => ({ spinner, children, ...props }: Object) => {
   if (spinner) {
     Navigation.showLightBox({
-      screen: 'mdp.Loader', // unique ID registered with Navigation.registerScreen
-      passProps: {}, // simple serializable object that will pass as props to the lightbox (optional)
+      screen: 'mdp.Loader',
       style: {
-        backgroundBlur: 'none', // 'dark' / 'light' / 'xlight' / 'none' - the type of blur on the background
+        backgroundBlur: 'none',
       },
     });
   } else {

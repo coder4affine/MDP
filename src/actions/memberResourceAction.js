@@ -27,9 +27,6 @@ export function loadMemberResource(user) {
     if (moment().isBefore(user.expires)) {
       return getMemberResource(`${user.token_type} ${user.access_token}`)(dispatch);
     }
-    return refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })(dispatch).then((data) => {
-      console.log(data);
-      return getMemberResource(user.access_token)(dispatch);
-    });
+    return refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })(dispatch).then(() => getMemberResource(user.access_token)(dispatch));
   };
 }

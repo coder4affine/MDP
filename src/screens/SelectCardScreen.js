@@ -14,12 +14,13 @@ function cardChange(card) {
   return { type: CARD_CHANGED, payload: card };
 }
 
-export class SelectCardScreen extends Component {
+export class SelectCard extends Component {
   static propTypes = {
     digitalCard: PropTypes.object.isRequired,
     savedCard: PropTypes.array.isRequired,
     cardChange: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
+    navigator: PropTypes.object.isRequired,
   };
   constructor(props) {
     super(props);
@@ -114,4 +115,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(SelectCardScreen));
+export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(SelectCard));

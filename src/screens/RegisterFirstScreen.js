@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView } from 'react-native';
+import { ScrollView, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SubmissionError, reset } from 'redux-form';
@@ -22,6 +22,12 @@ class RegisterFirst extends Component {
 
   redirectPush(registerData) {
     this.props.resetForm();
+    const navigatorButtons =
+      Platform.OS === 'ios'
+        ? {
+          leftButtons: [{ title: 'Cancel', id: 'closeModal' }],
+        }
+        : {};
     this.props.navigator.showModal({
       screen: 'mdp.RegisterSecondScreen',
       title: 'Register',
@@ -31,14 +37,11 @@ class RegisterFirst extends Component {
       navigatorStyle: {
         screenBackgroundColor: 'white',
       },
-      navigatorButtons: {
-        leftButtons: [{ title: 'Cancel', id: 'closeAllModal' }],
-      },
+      navigatorButtons,
     });
   }
 
   checkUserExist(formData) {
-    console.log(formData);
     const newData = {
       ...formData,
       BirthDate: moment(formData.BirthDate, 'L').format('L'),

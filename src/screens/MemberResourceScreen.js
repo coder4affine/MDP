@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { View, Text, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import moment from 'moment';
 
 import HelpButton from '../components/HelpButton';
 import LocaleWrapper from '../HOC/LocaleWrapper';
-import I18n from '../i18n';
+// import I18n from '../i18n';
 import * as memberResourceAction from '../actions/memberResourceAction';
 import * as authAction from '../actions/authAction';
 
 import MemberResource from '../components/MemberResource';
 
-export class MemberResourceScreen extends Component {
+export class MemberResources extends Component {
   static propTypes = {
     memberResource: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
@@ -86,4 +86,4 @@ const mapDispatchToProps = dispatch => ({
   authAction: bindActionCreators(authAction, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(MemberResourceScreen));
+export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(MemberResources));

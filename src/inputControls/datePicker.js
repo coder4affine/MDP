@@ -10,6 +10,7 @@ import {
   DatePickerAndroid,
   Modal,
   DatePickerIOS,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
@@ -121,8 +122,8 @@ class InputText extends Component {
           .toISOString();
         this.selectDate(date);
       }
-    } catch ({ code, message }) {
-      console.warn('Cannot open date picker', message);
+    } catch ({ code }) {
+      Alert.alert('Cannot open date picker');
     }
   }
 
@@ -156,11 +157,7 @@ class InputText extends Component {
           underlineColorAndroid={valid ? 'gray' : 'rgb(244, 67, 54)'}
         />
 
-        <TouchableHighlight
-          style={styles.textIcon}
-          underlayColor="white"
-          onPress={this.openPicker}
-        >
+        <TouchableHighlight style={styles.textIcon} underlayColor="white" onPress={this.openPicker}>
           <Icon name="md-calendar" size={22} />
         </TouchableHighlight>
 
@@ -221,6 +218,11 @@ InputText.propTypes = {
     pristine: PropTypes.bool.isRequired,
     visited: PropTypes.bool.isRequired,
   }).isRequired,
+  inputRef: PropTypes.func,
+};
+
+InputText.defaultProps = {
+  inputRef: () => {},
 };
 
 export default InputText;

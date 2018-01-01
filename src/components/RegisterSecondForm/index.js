@@ -34,7 +34,7 @@ function RegisterSecondForm({
 }) {
   return [
     <View key={0} style={{ margin: 10 }}>
-      {error && <Text>{error}</Text>}
+      {!!error && <Text>{error}</Text>}
     </View>,
     <View key={1} style={{ margin: 10 }}>
       <Text style={commonStyle.text}>User Name</Text>

@@ -1,15 +1,18 @@
+import ENFlag from './images/countryFlags/en.png';
+import ESFlag from './images/countryFlags/es.png';
+
 export default {
   defaultLocale: 'en',
   locale: [
     {
       key: 'en',
       value: 'English',
-      img: require('./images/countryFlags/en.png'),
+      img: ENFlag,
     },
     {
       key: 'es',
       value: 'Spanish',
-      img: require('./images/countryFlags/es.png'),
+      img: ESFlag,
     },
   ],
   primaryColor: 'green',

@@ -2,6 +2,7 @@ module.exports = {
   globals: {
     navigator: true,
     fetch: false,
+    __DEV__: false,
   },
   parser: 'babel-eslint',
   extends: 'airbnb',

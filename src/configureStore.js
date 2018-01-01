@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { REHYDRATE, PURGE, persistCombineReducers, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // or whatever storage you are using
+import { persistStore } from 'redux-persist';
+// import storage from 'redux-persist/lib/storage'; // or whatever storage you are using
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import rootReducer from './reducers';

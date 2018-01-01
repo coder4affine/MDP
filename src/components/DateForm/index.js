@@ -34,7 +34,7 @@ const DateSelect = ({
   pristine, handleSubmit, submitting, error,
 }) => (
   <ScrollView keyboardShouldPersistTaps="handled">
-    <View style={{ margin: 10 }}>{error && <Text>{error}</Text>}</View>
+    <View style={{ margin: 10 }}>{!!error && <Text>{error}</Text>}</View>
     <View style={{ margin: 10 }}>
       <Text style={commonStyle.text}>Birth Date</Text>
       <Field
@@ -65,6 +65,11 @@ DateSelect.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+};
+
+DateSelect.defaultProps = {
+  error: '',
 };
 
 export default reduxForm({

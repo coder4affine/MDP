@@ -4,9 +4,9 @@ import { View, Text } from 'react-native';
 import moment from 'moment';
 import Panel from '../Panel';
 
-const status = (status) => {
+const status = (data) => {
   let statusText = '';
-  switch (status) {
+  switch (data) {
     case 'A':
       statusText = 'Active';
       break;

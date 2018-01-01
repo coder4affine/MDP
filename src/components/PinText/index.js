@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, TextInput, Text, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
 
 export default class PinText extends Component {
   static propTypes = {
@@ -15,6 +15,7 @@ export default class PinText extends Component {
     codeLength: 4,
     autoFocus: true,
     compareWithCode: '',
+    onFistBack: () => {},
   };
 
   constructor(props) {
@@ -43,7 +44,9 @@ export default class PinText extends Component {
         this.setFocus(currentIndex - 1);
       } else {
         this.setFocus(0);
-        this.props.onFistBack && this.props.onFistBack();
+        if (this.props.onFistBack) {
+          this.props.onFistBack();
+        }
       }
     }
   }
@@ -66,6 +69,7 @@ export default class PinText extends Component {
       codeArr: newCodeArr,
       currentIndex: index,
     });
+    return true;
   }
 
   onInputCode(character, index) {
@@ -79,7 +83,9 @@ export default class PinText extends Component {
       if (compareWithCode) {
         const isMatching = code === compareWithCode;
         onFulfill(isMatching, code);
-        !isMatching && this.clear();
+        if (!isMatching) {
+          this.clear();
+        }
       } else {
         onFulfill(code);
       }
@@ -129,7 +135,9 @@ export default class PinText extends Component {
           {dataArray.map((item, index) => (
             <TextInput
               key={index}
-              ref={ref => (this.codeInputRefs[index] = ref)}
+              ref={(ref) => {
+                this.codeInputRefs[index] = ref;
+              }}
               style={{
                 height: 40,
                 width: 40,

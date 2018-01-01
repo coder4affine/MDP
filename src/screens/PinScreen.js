@@ -10,6 +10,7 @@ import {
   Dimensions,
   TouchableHighlight,
   Platform,
+  Alert,
 } from 'react-native';
 import TouchID from 'react-native-touch-id';
 
@@ -33,7 +34,7 @@ const optionalConfigObject = {
   color: '#e00606',
 };
 
-export class PinScreen extends Component<{}> {
+export class Pin extends Component<{}> {
   static propTypes = {
     pin: PropTypes.string.isRequired,
     setPin: PropTypes.func.isRequired,
@@ -72,7 +73,7 @@ export class PinScreen extends Component<{}> {
           this.touchAuth();
         })
         .catch(() => {
-          console.log('Touch ID not supported');
+          Alert.alert('Touch ID not supported');
         });
     }
   }
@@ -191,4 +192,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(PinScreen));
+export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(Pin));

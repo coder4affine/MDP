@@ -72,15 +72,19 @@ class Login extends Component {
 
   redirectPush() {
     this.props.resetForm();
+    const navigatorButtons =
+      Platform.OS === 'ios'
+        ? {
+          leftButtons: [{ title: 'Cancel', id: 'closeModal' }],
+        }
+        : {};
     this.props.navigator.showModal({
       screen: 'mdp.RegisterFirstScreen',
       title: 'Register',
       navigatorStyle: {
         screenBackgroundColor: 'white',
       },
-      navigatorButtons: {
-        leftButtons: [{ title: 'Cancel', id: 'closeModal' }],
-      },
+      navigatorButtons,
     });
   }
 
@@ -135,6 +139,7 @@ Login.propTypes = {
   auth: PropTypes.object.isRequired,
   changeAppRoot: PropTypes.func.isRequired,
   resetForm: PropTypes.func.isRequired,
+  navigator: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({

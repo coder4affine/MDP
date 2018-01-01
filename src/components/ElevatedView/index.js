@@ -38,7 +38,7 @@ export default class componentName extends PureComponent {
 
     // calculate iosShadows here
     const iosShadowElevation = {
-      shadowOpacity: 0.0015 * elevation + 0.18,
+      shadowOpacity: 0.0015 * elevation + 0.18, // eslint-disable-line
       shadowRadius: 0.54 * elevation,
       shadowOffset: {
         height: 0.6 * elevation,
