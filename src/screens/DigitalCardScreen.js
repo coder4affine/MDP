@@ -115,7 +115,7 @@ export class DigitalCard extends Component {
                     </View>
                   )}
                 {user && (
-                  <View>
+                  <View style={{ alignItems: 'center' }}>
                     <Text>Card last downloaded on</Text>
                     <Text>{moment(user.cardDownLoadDate).format('LLLL')}</Text>
                   </View>
