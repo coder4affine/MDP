@@ -157,13 +157,16 @@ export default class App {
           style: {
             contentOverlayColor: 'rgba(0,0,0,0.25)',
           },
-          type: 'TheSideBar',
-          animationType: 'facebook',
           disableOpenGesture: false,
         },
-        passProps: {},
         animationType: 'slide-down',
-        title: 'Redux Example',
+        title: 'MDP',
+        tabsStyle: {
+          tabBarBackgroundColor: '#003a66',
+          tabBarButtonColor: '#ffffff',
+          tabBarSelectedButtonColor: '#ff505c',
+          tabFontFamily: 'BioRhyme-Bold',
+        },
         appStyle: {
           bottomTabBadgeTextColor: '#ffffff',
           bottomTabBadgeBackgroundColor: '#ff0000',

@@ -5,6 +5,7 @@ import { RefreshControl, WebView, ScrollView, Dimensions } from 'react-native';
 import { bindActionCreators } from 'redux';
 import * as homeAction from '../actions/homeAction';
 import LocaleWrapper from '../HOC/LocaleWrapper';
+import HelpButton from '../components/HelpButton';
 
 const { height } = Dimensions.get('window');
 
@@ -42,8 +43,12 @@ export class Home extends Component {
     }
     const { loading } = this.state;
     return (
-      <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={this.getCard} />}>
+      <ScrollView
+        style={{ flex: 1 }}
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={this.getCard} />}
+      >
         <WebView source={{ html }} style={{ height: height - 120 }} />
+        <HelpButton />
       </ScrollView>
     );
   }

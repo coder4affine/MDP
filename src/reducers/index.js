@@ -26,7 +26,7 @@ const cardPersistConfig = {
   storage,
 };
 
-const userersistConfig = {
+const userPersistConfig = {
   key: 'user',
   storage,
 };
@@ -67,7 +67,7 @@ export default combineReducers({
   locale,
   checkUser,
   register,
-  user: persistReducer(cardPersistConfig, user),
+  user: persistReducer(userPersistConfig, user),
   card: persistReducer(cardPersistConfig, card),
   pin: persistReducer(pinPersistConfig, pin),
   auth: persistReducer(authPersistConfig, auth),

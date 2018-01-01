@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { View, Text, TouchableHighlight, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Navigation } from 'react-native-navigation';
 import { logout } from '../actions/authAction';
 import styles from '../commonStyle';
 
@@ -43,7 +44,7 @@ const menu = [
     id: 5,
     title: 'Chat',
     icon: 'md-chatbubbles',
-    link: 'push/mdp.NeedHelpScreen',
+    link: 'modal',
   },
   {
     id: 6,
@@ -82,10 +83,21 @@ class SideMenu extends Component {
   }
 
   menuPress(link) {
+    this.toggleDrawer();
     if (link === 'logout') {
       this.props.logout();
+    } else if (link === 'modal') {
+      this.props.navigator.showModal({
+        screen: 'mdp.NeedHelpScreen',
+        title: 'Need Help',
+        navigatorStyle: {
+          screenBackgroundColor: 'white',
+        },
+        navigatorButtons: {
+          leftButtons: [{ title: 'Cancel', id: 'closeModal' }],
+        },
+      });
     } else {
-      this.toggleDrawer();
       this.props.navigator.handleDeepLink({
         link,
       });

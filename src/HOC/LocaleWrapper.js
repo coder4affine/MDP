@@ -58,6 +58,7 @@ function LocaleWrapper(WrapperComponent, name = '') {
         }
       }
       if (event.type === 'DeepLink') {
+        // alert(JSON.stringify(event));
         const parts = event.link.split('/');
         // const payload = event.payload;
         if (parts[0] === 'tab') {

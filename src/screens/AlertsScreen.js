@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { View, StyleSheet, FlatList } from 'react-native';
 import moment from 'moment';
-
+import HelpButton from '../components/HelpButton';
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import I18n from '../i18n';
 import * as alertsAction from '../actions/alertsAction';
@@ -85,6 +85,7 @@ export class AlertsScreen extends Component {
             onRefresh={this.getAlerts}
           />
         )}
+        <HelpButton />
       </View>
     );
   }

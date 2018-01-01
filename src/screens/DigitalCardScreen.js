@@ -7,6 +7,7 @@ import moment from 'moment';
 import DigitalCard from '../components/DigitalCard';
 import ElevatedView from '../components/ElevatedView';
 import Button from '../inputControls/button';
+import HelpButton from '../components/HelpButton';
 
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import * as digitalCardAction from '../actions/digitalCardAction';
@@ -90,34 +91,40 @@ export class DigitalCardScreen extends Component {
     const { loading } = this.state;
     const { locale, card, user } = this.props;
     return (
-      <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={this.getCard} />}>
-        {card &&
-          locale && (
-            <View style={{ alignItems: 'center', margin: 10 }}>
-              <Text>{`${card.FirstName} ${card.LastName}'s Card`}</Text>
-              <DigitalCard locale={locale} groupMember={card} />
-              <View style={{ marginVertical: 10 }}>
-                <ElevatedView elevation={2} style={{ width: 288 }}>
-                  <Button text="Family Member Card" onPress={this.selectCard} />
-                </ElevatedView>
-              </View>
-              {user &&
-                card.MemberID !== user.MemberID && (
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          style={{ flex: 1 }}
+          refreshControl={<RefreshControl refreshing={loading} onRefresh={this.getCard} />}
+        >
+          {card &&
+            locale && (
+              <View style={{ alignItems: 'center', margin: 10 }}>
+                <Text>{`${card.FirstName} ${card.LastName}'s Card`}</Text>
+                <DigitalCard locale={locale} groupMember={card} />
+                <View style={{ marginVertical: 10 }}>
+                  <ElevatedView elevation={2} style={{ width: 288 }}>
+                    <Button text="Family Member Card" onPress={this.selectCard} />
+                  </ElevatedView>
+                </View>
+                {user &&
+                  card.MemberID !== user.MemberID && (
+                    <View>
+                      <ElevatedView elevation={2} style={{ width: 288 }}>
+                        <Button text="My Card" onPress={this.showMyCard} />
+                      </ElevatedView>
+                    </View>
+                  )}
+                {user && (
                   <View>
-                    <ElevatedView elevation={2} style={{ width: 288 }}>
-                      <Button text="My Card" onPress={this.showMyCard} />
-                    </ElevatedView>
+                    <Text>Card last downloaded on</Text>
+                    <Text>{moment(user.cardDownLoadDate).format('LLLL')}</Text>
                   </View>
                 )}
-              {user && (
-                <View>
-                  <Text>Card last downloaded on</Text>
-                  <Text>{moment(user.cardDownLoadDate).format('LLLL')}</Text>
-                </View>
-              )}
-            </View>
-          )}
-      </ScrollView>
+              </View>
+            )}
+        </ScrollView>
+        <HelpButton />
+      </View>
     );
   }
 }

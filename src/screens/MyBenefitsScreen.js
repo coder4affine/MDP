@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { View, FlatList, StyleSheet } from 'react-native';
 import moment from 'moment';
 import MyBenefits from '../components/MyBenefits';
+import HelpButton from '../components/HelpButton';
 
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import * as digitalCardAction from '../actions/digitalCardAction';
@@ -59,14 +60,19 @@ export class MyBenefitScreen extends Component {
     const { loading } = this.state;
     const { locale } = this.props;
     return (
-      <FlatList
-        data={data}
-        renderItem={({ item, index }) => <MyBenefits item={item} expanded={index === 0} />}
-        ItemSeparatorComponent={() => <View style={{ borderTopWidth: StyleSheet.hairlineWidth }} />}
-        keyExtractor={item => item.MemberID}
-        refreshing={loading}
-        onRefresh={this.getCard}
-      />
+      <View style={{ flex: 1 }}>
+        <FlatList
+          data={data}
+          renderItem={({ item, index }) => <MyBenefits item={item} expanded={index === 0} />}
+          ItemSeparatorComponent={() => (
+            <View style={{ borderTopWidth: StyleSheet.hairlineWidth }} />
+          )}
+          keyExtractor={item => item.MemberID}
+          refreshing={loading}
+          onRefresh={this.getCard}
+        />
+        <HelpButton />
+      </View>
     );
   }
 }

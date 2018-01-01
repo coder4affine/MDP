@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 import config from './config';
 
 const window = Dimensions.get('window');
@@ -53,6 +53,17 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     alignSelf: 'center',
     marginVertical: 20,
+  },
+  input: {
+    ...Platform.select({
+      ios: {
+        borderWidth: StyleSheet.hairlineWidth,
+        borderRadius: 4,
+        borderColor: 'gray',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+      },
+    }),
   },
 });
 
