@@ -166,6 +166,7 @@ export default class App {
           tabBarButtonColor: '#ffffff',
           tabBarSelectedButtonColor: '#ff505c',
           tabFontFamily: 'BioRhyme-Bold',
+          initialTabIndex: 2,
         },
         appStyle: {
           bottomTabBadgeTextColor: '#ffffff',

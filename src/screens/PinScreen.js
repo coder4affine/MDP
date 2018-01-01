@@ -73,7 +73,7 @@ export class Pin extends Component<{}> {
           this.touchAuth();
         })
         .catch(() => {
-          Alert.alert('Touch ID not supported');
+          console.log('Touch ID not supported');
         });
     }
   }
@@ -133,7 +133,7 @@ export class Pin extends Component<{}> {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <Animated.Image source={logo} style={[styles.logo, { height: this.imageHeight }]} />
-        <View style={{ alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <Text>{I18n.t('selectPin')}</Text>
           {!!error && <Text>{error}</Text>}
         </View>
