@@ -11,7 +11,13 @@ function RegisterSecondForm({
   pristine, handleSubmit, submitting, error,
 }) {
   const {
-    required, password, maxLength20, maxLength12, minLength8,
+    required,
+    password,
+    maxLength20,
+    maxLength12,
+    minLength8,
+    comparePassword,
+    compareUsername,
   } = fieldValidation;
   return [
     <View key={0} style={{ margin: 10 }}>
@@ -35,7 +41,7 @@ function RegisterSecondForm({
       <Field
         name="ConfirmUserName"
         component={TextInput}
-        validate={[required, maxLength20, minLength8]}
+        validate={[required, maxLength20, minLength8, compareUsername]}
         placeholder="User Name"
         returnKeyType="next"
         onSubmitEditing={() => {
@@ -65,7 +71,7 @@ function RegisterSecondForm({
       <Field
         name="ConfirmPassword"
         component={TextInput}
-        validate={[required, maxLength12, minLength8, password]}
+        validate={[required, maxLength12, minLength8, password, comparePassword]}
         placeholder="Confirm Password"
         inputRef={(el) => {
           this.confirmPassword = el;

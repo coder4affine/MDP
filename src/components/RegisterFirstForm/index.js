@@ -12,7 +12,14 @@ const RegisterFirst = ({
   pristine, handleSubmit, submitting, error,
 }) => {
   const {
-    required, alphabets, maxLength40, date, maxLength20, normalizeDate,
+    required,
+    alphabets,
+    maxLength40,
+    date,
+    maxLength20,
+    normalizeDate,
+    requiredIfNoSSN,
+    requiredIfNoMemberId,
   } = fieldValidation;
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
@@ -70,7 +77,7 @@ const RegisterFirst = ({
           <Field
             name="SSN"
             component={TextInput}
-            validate={[maxLength20]}
+            validate={[requiredIfNoMemberId, maxLength20]}
             placeholder="Social Security Number"
             inputRef={(el) => {
               this.ssn = el;
@@ -98,7 +105,7 @@ const RegisterFirst = ({
           <Field
             name="MemberId"
             component={TextInput}
-            validate={[maxLength20]}
+            validate={[requiredIfNoSSN, maxLength20]}
             placeholder="Medicaid ID"
             inputRef={(el) => {
               this.medicaidId = el;

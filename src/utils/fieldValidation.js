@@ -43,6 +43,17 @@ const normalizeDate = (value, previousValue) => {
   return `${onlyNums.slice(0, 2)}/${onlyNums.slice(2, 4)}/${onlyNums.slice(4, 8)}`;
 };
 
+const comparePassword = (value, allValues) =>
+  (allValues.Password && value === allValues.Password ? undefined : 'Password not match');
+
+const compareUsername = (value, allValues) =>
+  (allValues.UserName && value === allValues.UserName ? undefined : 'Password not match');
+
+const requiredIfNoSSN = (value, allValues) => (value || allValues.SSN ? undefined : 'Required');
+
+const requiredIfNoMemberId = (value, allValues) =>
+  (value || allValues.MemberId ? undefined : 'Required');
+
 export default {
   required,
   password,
@@ -53,4 +64,8 @@ export default {
   date,
   alphabets,
   normalizeDate,
+  comparePassword,
+  compareUsername,
+  requiredIfNoSSN,
+  requiredIfNoMemberId,
 };
