@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         user: action.payload,
-        updatedOn: action.action,
+        updatedOn: action.updatedOn,
       };
     case types.LOGIN_FAIL:
       return {

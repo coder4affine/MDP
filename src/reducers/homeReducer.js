@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         data: action.payload,
-        updatedOn: action.action,
+        updatedOn: action.updatedOn,
       };
     case types.HOME_FAIL:
       return {

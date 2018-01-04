@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         data: action.payload,
-        updatedOn: action.action,
+        updatedOn: action.updatedOn,
       };
     case types.CHECK_USER_EXIST_FAIL:
       return { ...state, loading: false, error: action.payload };
