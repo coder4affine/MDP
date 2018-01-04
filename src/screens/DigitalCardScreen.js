@@ -24,6 +24,7 @@ export class DigitalCard extends Component {
     locale: PropTypes.string.isRequired,
     navigator: PropTypes.object.isRequired,
     cardChange: PropTypes.func.isRequired,
+    digitalCard: PropTypes.object.isRequired,
     card: PropTypes.object,
     user: PropTypes.object,
   };
@@ -36,37 +37,23 @@ export class DigitalCard extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      loading: false,
-    };
     this.getCard = this.getCard.bind(this);
     this.selectCard = this.selectCard.bind(this);
     this.showMyCard = this.showMyCard.bind(this);
   }
 
-  componentWillMount() {
-    this.getCard();
-  }
-
   getCard() {
-    this.setState({ loading: true });
     const { user, updatedOn } = this.props.auth;
     if (user) {
       if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
-        this.props.actions.getGroupMember(`${user.token_type} ${user.access_token}`).then(() => {
-          this.setState({ loading: false });
-        });
+        this.props.actions.getGroupMember(`${user.token_type} ${user.access_token}`);
       } else {
         this.props.actions
           .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
-          .then(() =>
-            this.props.actions.getGroupMember(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`))
           .then(() => {
-            this.setState({ loading: false });
+            this.props.actions.getGroupMember(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`);
           });
       }
-    } else {
-      this.setState({ loading: false });
     }
   }
 
@@ -86,13 +73,19 @@ export class DigitalCard extends Component {
   }
 
   render() {
-    const { loading } = this.state;
-    const { locale, card, user } = this.props;
+    const {
+      locale, card, user, digitalCard, auth,
+    } = this.props;
     return (
       <View style={{ flex: 1 }}>
         <ScrollView
           style={{ flex: 1 }}
-          refreshControl={<RefreshControl refreshing={loading} onRefresh={this.getCard} />}
+          refreshControl={
+            <RefreshControl
+              refreshing={digitalCard.loading || auth.loading}
+              onRefresh={this.getCard}
+            />
+          }
         >
           {card &&
             locale && (
@@ -132,6 +125,7 @@ const mapStateToProps = state => ({
   locale: state.locale.locale,
   card: state.card.card,
   user: state.user.user,
+  digitalCard: state.digitalCard,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -7,7 +7,7 @@ import actions from '../actions';
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import HelpButton from '../components/HelpButton';
 
-const { height } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 export class Home extends Component {
   static propTypes = {
@@ -19,34 +19,24 @@ export class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      loading: false,
-    };
     this.loadHome = this.loadHome.bind(this);
-  }
-  componentWillMount() {
-    this.props.actions.loadHome();
   }
 
   loadHome() {
-    this.setState({ loading: true });
-    this.props.actions.loadHome().then(() => {
-      this.setState({ loading: false });
-    });
+    this.props.actions.loadHome();
   }
 
   render() {
     const { home, locale } = this.props;
+    const { loading, data } = home;
     let html = '';
-    if (home.data) {
-      html = home.data[locale];
+    if (data) {
+      html = data[locale];
     }
-    const { loading } = this.state;
     return (
       <View style={{ flex: 1 }}>
         <ScrollView
-          style={{ flex: 1 }}
-          refreshControl={<RefreshControl refreshing={loading} onRefresh={this.getCard} />}
+          refreshControl={<RefreshControl refreshing={loading} onRefresh={this.loadHome} />}
         >
           <WebView source={{ html }} style={{ height: height - 120 }} />
         </ScrollView>

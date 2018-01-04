@@ -22,49 +22,34 @@ export class MemberResources extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      loading: false,
-    };
     this.getMemberResource = this.getMemberResource.bind(this);
   }
 
-  componentWillMount() {
-    this.getMemberResource();
-  }
-
   getMemberResource() {
-    this.setState({ loading: true });
     const { user, updatedOn } = this.props.auth;
     if (user) {
       if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
-        this.props.actions.getMemberResource(`${user.token_type} ${user.access_token}`).then(() => {
-          this.setState({ loading: false });
-        });
+        this.props.actions.getMemberResource(`${user.token_type} ${user.access_token}`);
       } else {
         this.props.actions
           .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
-          .then(() =>
-            this.props.actions.getMemberResource(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`))
           .then(() => {
-            this.setState({ loading: false });
+            this.props.actions.getMemberResource(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`);
           });
       }
-    } else {
-      this.setState({ loading: false });
     }
   }
 
   render() {
-    const { data } = this.props.memberResource;
-    const { loading } = this.state;
+    const { memberResource, auth } = this.props;
     return (
       <View style={{ flex: 1 }}>
-        {data && (
+        {memberResource.data && (
           <FlatList
-            data={data}
+            data={memberResource.data}
             renderItem={({ item }) => <MemberResource item={item} />}
             keyExtractor={item => item.SectionID}
-            refreshing={loading}
+            refreshing={memberResource.loading || auth.loading}
             onRefresh={this.getMemberResource}
           />
         )}

@@ -2,6 +2,7 @@
 import { Provider } from 'react-redux';
 import { Platform } from 'react-native';
 import { Navigation } from 'react-native-navigation';
+import moment from 'moment';
 import { PIN, MAIN, LOGIN } from './constants/actionTypes';
 import configureStore from './configureStore';
 import actions from './actions';
@@ -49,6 +50,26 @@ export default class App {
         },
       });
     } else if (root === MAIN) {
+      const { user, updatedOn } = store.getState().auth;
+      if (user) {
+        if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
+          const token = `${user.token_type} ${user.access_token}`;
+          store.dispatch(actions.loadHome(token));
+          store.dispatch(actions.getGroupMember(token));
+          store.dispatch(actions.getMemberResource(token));
+          store.dispatch(actions.getAlerts(token));
+        } else {
+          const refreshToken = { refresh_token: user.refresh_token, grant_type: 'refresh_token' };
+          store.dispatch(actions.refreshToken(refreshToken)).then(() => {
+            const updatedUser = store.getState().auth;
+            const token = `${updatedUser.user.token_type} ${updatedUser.user.access_token}`;
+            store.dispatch(actions.loadHome(token));
+            store.dispatch(actions.getGroupMember(token));
+            store.dispatch(actions.getMemberResource(token));
+            store.dispatch(actions.getAlerts(token));
+          });
+        }
+      }
       Navigation.startTabBasedApp({
         tabs: [
           {

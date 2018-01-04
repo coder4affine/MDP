@@ -20,54 +20,41 @@ export class MyBenefitScreen extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      loading: false,
-    };
     this.getCard = this.getCard.bind(this);
   }
 
-  componentWillMount() {
-    this.getCard();
-  }
-
   getCard() {
-    this.setState({ loading: true });
     const { user, updatedOn } = this.props.auth;
     if (user) {
       if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
-        this.props.actions.getGroupMember(`${user.token_type} ${user.access_token}`).then(() => {
-          this.setState({ loading: false });
-        });
+        this.props.actions.getGroupMember(`${user.token_type} ${user.access_token}`);
       } else {
         this.props.actions
           .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
-          .then(() =>
-            this.props.actions.getGroupMember(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`))
           .then(() => {
-            this.setState({ loading: false });
+            this.props.actions.getGroupMember(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`);
           });
       }
-    } else {
-      this.setState({ loading: false });
     }
   }
 
   render() {
-    const { data } = this.props.digitalCard;
-    const { loading } = this.state;
-    // const { locale } = this.props;
+    const { digitalCard, auth } = this.props;
+    const loading = digitalCard.loading || auth.loading;
     return (
       <View style={{ flex: 1 }}>
-        <FlatList
-          data={data}
-          renderItem={({ item, index }) => <MyBenefits item={item} expanded={index === 0} />}
-          ItemSeparatorComponent={() => (
-            <View style={{ borderTopWidth: StyleSheet.hairlineWidth }} />
-          )}
-          keyExtractor={item => item.MemberID}
-          refreshing={loading}
-          onRefresh={this.getCard}
-        />
+        {digitalCard.data && (
+          <FlatList
+            data={digitalCard.data}
+            renderItem={({ item, index }) => <MyBenefits item={item} expanded={index === 0} />}
+            ItemSeparatorComponent={() => (
+              <View style={{ borderTopWidth: StyleSheet.hairlineWidth }} />
+            )}
+            keyExtractor={item => item.MemberID}
+            refreshing={loading}
+            onRefresh={this.getCard}
+          />
+        )}
         <HelpButton />
       </View>
     );
