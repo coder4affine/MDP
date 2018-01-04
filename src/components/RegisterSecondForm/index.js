@@ -2,36 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { View, Text } from 'react-native';
-// import * as PropertiesActions from '../../Actions/PropertiesActions';
 import commonStyle from '../../commonStyle';
-
+import fieldValidation from '../../utils/fieldValidation';
 import TextInput from '../../inputControls/textInput';
 import Button from '../../inputControls/button';
-
-const validate = (values) => {
-  const errors = {};
-  if (!values.username) {
-    errors.username = 'Required';
-  } else if (values.username.length > 15) {
-    errors.username = 'Must be 15 characters or less';
-  }
-  if (!values.password) {
-    errors.password = 'Required';
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.confirmPassword)) {
-    errors.password = 'Invalid email address';
-  }
-  if (!values.confirmPassword) {
-    errors.confirmPassword = 'Required';
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.confirmPassword)) {
-    errors.confirmPassword = 'Invalid email address';
-  }
-
-  return errors;
-};
 
 function RegisterSecondForm({
   pristine, handleSubmit, submitting, error,
 }) {
+  const {
+    required, password, maxLength20, maxLength12, minLength8,
+  } = fieldValidation;
   return [
     <View key={0} style={{ margin: 10 }}>
       {!!error && <Text>{error}</Text>}
@@ -41,6 +22,7 @@ function RegisterSecondForm({
       <Field
         name="UserName"
         component={TextInput}
+        validate={[required, maxLength20, minLength8]}
         placeholder="User Name"
         returnKeyType="next"
         onSubmitEditing={() => {
@@ -53,6 +35,7 @@ function RegisterSecondForm({
       <Field
         name="ConfirmUserName"
         component={TextInput}
+        validate={[required, maxLength20, minLength8]}
         placeholder="User Name"
         returnKeyType="next"
         onSubmitEditing={() => {
@@ -65,6 +48,7 @@ function RegisterSecondForm({
       <Field
         name="Password"
         component={TextInput}
+        validate={[required, maxLength12, minLength8, password]}
         placeholder="Password"
         inputRef={(el) => {
           this.password = el;
@@ -81,6 +65,7 @@ function RegisterSecondForm({
       <Field
         name="ConfirmPassword"
         component={TextInput}
+        validate={[required, maxLength12, minLength8, password]}
         placeholder="Confirm Password"
         inputRef={(el) => {
           this.confirmPassword = el;
@@ -109,5 +94,4 @@ RegisterSecondForm.propTypes = {
 
 export default reduxForm({
   form: 'registerSecond',
-  validate,
 })(RegisterSecondForm);

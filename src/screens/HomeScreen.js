@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { RefreshControl, WebView, ScrollView, Dimensions, View } from 'react-native';
 import { bindActionCreators } from 'redux';
-import * as homeAction from '../actions/homeAction';
+import actions from '../actions';
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import HelpButton from '../components/HelpButton';
 
@@ -62,7 +62,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(homeAction, dispatch),
+  actions: bindActionCreators(actions, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(Home));

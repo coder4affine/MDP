@@ -2,27 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { View, Text } from 'react-native';
-// import * as PropertiesActions from '../../Actions/PropertiesActions';
 import commonStyle from '../../commonStyle';
 
+import fieldValidation from '../../utils/fieldValidation';
 import TextInput from '../../inputControls/textInput';
 import Button from '../../inputControls/button';
-
-const validate = (values) => {
-  const errors = {};
-  const requiredFields = ['username', 'password'];
-  requiredFields.forEach((field) => {
-    if (!values[field]) {
-      errors[field] = 'Required';
-    }
-  });
-
-  return errors;
-};
 
 function LoginForm({
   pristine, handleSubmit, submitting, error,
 }) {
+  const {
+    required, password, maxLength20, maxLength12, minLength8,
+  } = fieldValidation;
   return [
     <View key={0} style={{ margin: 10 }}>
       {!!error && <Text>{error}</Text>}
@@ -32,6 +23,7 @@ function LoginForm({
       <Field
         name="username"
         component={TextInput}
+        validate={[required, maxLength20, minLength8]}
         placeholder="User Name"
         returnKeyType="next"
         onSubmitEditing={() => {
@@ -44,6 +36,7 @@ function LoginForm({
       <Field
         name="password"
         component={TextInput}
+        validate={[required, maxLength12, minLength8, password]}
         placeholder="Password"
         inputRef={(el) => {
           this.password = el;
@@ -72,5 +65,4 @@ LoginForm.propTypes = {
 
 export default reduxForm({
   form: 'signIn',
-  validate,
 })(LoginForm);

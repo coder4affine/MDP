@@ -8,8 +8,7 @@ import moment from 'moment';
 import HelpButton from '../components/HelpButton';
 import LocaleWrapper from '../HOC/LocaleWrapper';
 // import I18n from '../i18n';
-import * as memberResourceAction from '../actions/memberResourceAction';
-import * as authAction from '../actions/authAction';
+import actions from '../actions';
 
 import MemberResource from '../components/MemberResource';
 
@@ -18,7 +17,6 @@ export class MemberResources extends Component {
     memberResource: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
-    authAction: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -36,14 +34,14 @@ export class MemberResources extends Component {
 
   getMemberResource() {
     this.setState({ loading: true });
-    const { user } = this.props.auth;
+    const { user, updatedOn } = this.props.auth;
     if (user) {
-      if (moment().isBefore(user.expires)) {
+      if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
         this.props.actions.getMemberResource(`${user.token_type} ${user.access_token}`).then(() => {
           this.setState({ loading: false });
         });
       } else {
-        this.props.authAction
+        this.props.actions
           .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
           .then(() =>
             this.props.actions.getMemberResource(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`))
@@ -82,8 +80,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(memberResourceAction, dispatch),
-  authAction: bindActionCreators(authAction, dispatch),
+  actions: bindActionCreators(actions, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocaleWrapper(MemberResources));

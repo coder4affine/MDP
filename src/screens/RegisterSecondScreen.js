@@ -6,11 +6,10 @@ import { bindActionCreators } from 'redux';
 import { SubmissionError } from 'redux-form';
 
 import { MAIN } from '../constants/actionTypes';
-import { changeAppRoot } from '../actions/app';
 
 import RegisterSecondForm from '../components/RegisterSecondForm';
 import LocaleWrapper from '../HOC/LocaleWrapper';
-import * as authAction from '../actions/authAction';
+import actions from '../actions';
 
 class RegisterSecond extends Component {
   constructor(props) {
@@ -80,9 +79,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(authAction, dispatch),
+  actions: bindActionCreators(actions, dispatch),
   changeAppRoot: (root) => {
-    dispatch(changeAppRoot(root));
+    dispatch(actions.changeAppRoot(root));
   },
 });
 

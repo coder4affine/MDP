@@ -20,11 +20,11 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         right: 10,
-        bottom: 2,
+        top: 2,
       },
       android: {
         right: 14,
-        bottom: 14,
+        top: 14,
       },
     }),
   },

@@ -10,13 +10,11 @@ import {
   Dimensions,
   TouchableHighlight,
   Platform,
-  Alert,
 } from 'react-native';
 import TouchID from 'react-native-touch-id';
 
 import { MAIN, LOGIN } from '../constants/actionTypes';
-import { changeAppRoot } from '../actions/app';
-import setPin from '../actions/pinActions';
+import actions from '../actions';
 import PinText from '../components/PinText';
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import styles from '../commonStyle';
@@ -66,14 +64,14 @@ export class Pin extends Component<{}> {
       this.keyboardDidShow = Keyboard.addListener('keyboardDidShow', this.keyboardWillShow);
       this.keyboardDidHide = Keyboard.addListener('keyboardDidHide', this.keyboardWillHide);
     }
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === 'ios' && this.state.pin) {
       TouchID.isSupported()
         .then(() => {
           this.setState({ touchID: true });
           this.touchAuth();
         })
         .catch(() => {
-          console.log('Touch ID not supported');
+          this.setState({ error: 'Touch ID not supported' });
         });
     }
   }
@@ -119,7 +117,11 @@ export class Pin extends Component<{}> {
   touchAuth() {
     TouchID.authenticate('to demo this react-native component', optionalConfigObject)
       .then(() => {
-        this.props.changeAppRoot('after-pin');
+        if (this.props.auth.user) {
+          this.props.changeAppRoot(MAIN);
+        } else {
+          this.props.changeAppRoot(LOGIN);
+        }
       })
       .catch(() => {
         this.setState({ error: 'Authentication Failed' });
@@ -187,10 +189,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   changeAppRoot: (root) => {
-    dispatch(changeAppRoot(root));
+    dispatch(actions.changeAppRoot(root));
   },
   setPin: (pin) => {
-    dispatch(setPin(pin));
+    dispatch(actions.setPin(pin));
   },
 });
 

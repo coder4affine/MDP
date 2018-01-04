@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   data: null,
   error: false,
+  updatedOn: null,
 };
 
 export default (state = initialState, action) => {
@@ -18,6 +19,7 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         data: action.payload,
+        updatedOn: action.action,
       };
     case types.HOME_FAIL:
       return {

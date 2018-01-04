@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { PIN, MAIN, LOGIN } from './constants/actionTypes';
 import configureStore from './configureStore';
-import { appInitialized } from './actions/app';
+import actions from './actions';
 import { registerScreens } from './screens';
 import { iconsMap, iconsLoaded } from './utils/AppIcons';
 
@@ -15,7 +15,7 @@ registerScreens(store, Provider);
 export default class App {
   constructor() {
     store.subscribe(this.onStoreUpdate.bind(this));
-    store.dispatch(appInitialized());
+    store.dispatch(actions.appInitialized());
   }
 
   currentRoot: '';

@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 import { View, Text, TouchableHighlight, StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-// import { Navigation } from 'react-native-navigation';
-import { logout } from '../actions/authAction';
-// import styles from '../commonStyle';
-
-// import I18n from '../i18n';
+import actions from '../actions';
 
 const menu = [
   {
@@ -154,7 +150,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   logout: () => {
-    dispatch(logout());
+    dispatch(actions.logout());
   },
 });
 

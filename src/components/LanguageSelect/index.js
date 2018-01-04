@@ -7,7 +7,7 @@ import { Navigation } from 'react-native-navigation';
 import config from '../../config';
 import commonStyle from '../../commonStyle';
 import styles from './styles';
-import changeLocale from '../../actions/languageAction';
+import actions from '../../actions';
 import I18n from '../../i18n';
 
 class LanguageSelect extends Component {
@@ -94,7 +94,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   changeLocale: (locale) => {
-    dispatch(changeLocale(locale));
+    dispatch(actions.changeLocale(locale));
   },
 });
 

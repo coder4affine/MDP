@@ -1,10 +1,8 @@
-import moment from 'moment';
 import * as types from '../constants/actionTypes';
-import { refreshToken } from './authAction';
 import Api, { Action } from '../utils/apiUtil';
 import config from '../config';
 
-export function getMemberResource(token) {
+export default function getMemberResource(token) {
   return (dispatch) => {
     dispatch(Action(types.LOAD_MEMBER_RESOURCE));
     return Api.jsonService(
@@ -19,14 +17,5 @@ export function getMemberResource(token) {
       .catch((error) => {
         dispatch(Action(types.LOAD_MEMBER_RESOURCE_FAIL, error.response._bodyText)); // eslint-disable-line
       });
-  };
-}
-
-export function loadMemberResource(user) {
-  return (dispatch) => {
-    if (moment().isBefore(user.expires)) {
-      return getMemberResource(`${user.token_type} ${user.access_token}`)(dispatch);
-    }
-    return refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })(dispatch).then(() => getMemberResource(user.access_token)(dispatch));
   };
 }

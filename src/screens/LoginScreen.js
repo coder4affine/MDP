@@ -14,11 +14,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SubmissionError, reset } from 'redux-form';
 import { MAIN } from '../constants/actionTypes';
-import { changeAppRoot } from '../actions/app';
 import LoginForm from '../components/LoginForm';
 import LocaleWrapper from '../HOC/LocaleWrapper';
 
-import * as authAction from '../actions/authAction';
+import actions from '../actions';
 
 import logo from '../images/logo.png';
 import styles from '../commonStyle';
@@ -147,9 +146,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(authAction, dispatch),
+  actions: bindActionCreators(actions, dispatch),
   changeAppRoot: (root) => {
-    dispatch(changeAppRoot(root));
+    dispatch(actions.changeAppRoot(root));
   },
   resetForm: () => {
     dispatch(reset('signIn'));

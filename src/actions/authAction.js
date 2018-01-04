@@ -1,4 +1,3 @@
-import moment from 'moment';
 import * as types from '../constants/actionTypes';
 import { changeAppRoot } from './app';
 import Api, { Action } from '../utils/apiUtil';
@@ -10,10 +9,7 @@ export function login(data) {
     return Api.jsonService(`${config.serviceApi}MDP/api/users/login`, 'post', data)
       .then((result) => {
         if (result.Success) {
-          const expires = moment()
-            .add(result.Payload.data.expires_in - 10, 'seconds')
-            .toDate();
-          dispatch(Action(types.LOGIN_SUCCESS, { ...result.Payload.data, expires }));
+          dispatch(Action(types.LOGIN_SUCCESS, result.Payload.data));
         }
       })
       .catch((error) => {
@@ -27,10 +23,7 @@ export function refreshToken(data) {
     dispatch(Action(types.LOGIN_REQUEST));
     return Api.encodedService(`${config.serviceApi}token`, 'post', data)
       .then((result) => {
-        const expires = moment()
-          .add(result.expires_in - 10, 'seconds')
-          .toDate();
-        dispatch(Action(types.LOGIN_SUCCESS, { ...result, expires }));
+        dispatch(Action(types.LOGIN_SUCCESS, result));
       })
       .catch((error) => {
         dispatch(Action(types.LOGIN_FAIL, error));

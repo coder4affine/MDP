@@ -10,8 +10,7 @@ import Button from '../inputControls/button';
 import HelpButton from '../components/HelpButton';
 
 import LocaleWrapper from '../HOC/LocaleWrapper';
-import * as digitalCardAction from '../actions/digitalCardAction';
-import * as authAction from '../actions/authAction';
+import actions from '../actions';
 import { CARD_CHANGED } from '../constants/actionTypes';
 
 function cardChange(card) {
@@ -22,7 +21,6 @@ export class DigitalCard extends Component {
   static propTypes = {
     auth: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
-    authAction: PropTypes.object.isRequired,
     locale: PropTypes.string.isRequired,
     navigator: PropTypes.object.isRequired,
     cardChange: PropTypes.func.isRequired,
@@ -52,14 +50,14 @@ export class DigitalCard extends Component {
 
   getCard() {
     this.setState({ loading: true });
-    const { user } = this.props.auth;
+    const { user, updatedOn } = this.props.auth;
     if (user) {
-      if (moment().isBefore(user.expires)) {
+      if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
         this.props.actions.getGroupMember(`${user.token_type} ${user.access_token}`).then(() => {
           this.setState({ loading: false });
         });
       } else {
-        this.props.authAction
+        this.props.actions
           .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
           .then(() =>
             this.props.actions.getGroupMember(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`))
@@ -137,8 +135,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(digitalCardAction, dispatch),
-  authAction: bindActionCreators(authAction, dispatch),
+  actions: bindActionCreators(actions, dispatch),
   cardChange: (card) => {
     dispatch(cardChange(card));
   },

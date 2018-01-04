@@ -8,7 +8,7 @@ import moment from 'moment';
 
 import RegisterFirstForm from '../components/RegisterFirstForm';
 import LocaleWrapper from '../HOC/LocaleWrapper';
-import * as authAction from '../actions/authAction';
+import actions from '../actions';
 
 class RegisterFirst extends Component {
   constructor(props) {
@@ -98,7 +98,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(authAction, dispatch),
+  actions: bindActionCreators(actions, dispatch),
   resetForm: () => {
     dispatch(reset('signIn'));
   },

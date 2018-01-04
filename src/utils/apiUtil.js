@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export function checkHttpStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -14,6 +16,7 @@ export function parseJSON(response) {
 export const Action = (type, payload) => ({
   type,
   payload,
+  updatedOn: moment().toDate(),
 });
 
 class Api {
