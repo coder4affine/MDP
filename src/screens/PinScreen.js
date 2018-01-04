@@ -96,7 +96,7 @@ export class Pin extends Component<{}> {
         this.props.changeAppRoot(LOGIN);
       }
     } else {
-      this.setState({ error: 'Authantication Fail' });
+      console.log('Authentication Fail'); // eslint-disable-line
     }
   }
 

@@ -7,7 +7,7 @@ import actions from '../actions';
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import HelpButton from '../components/HelpButton';
 
-const { height, width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 export class Home extends Component {
   static propTypes = {

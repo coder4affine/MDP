@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, TextInput, StyleSheet } from 'react-native';
@@ -59,11 +60,11 @@ export default class PinText extends Component {
       return this.setFocus(currentEmptyIndex);
     }
 
-    for (const i in newCodeArr) {
+    newCodeArr.forEach((_, i) => {
       if (i >= index) {
         newCodeArr[i] = '';
       }
-    }
+    });
 
     this.setState({
       codeArr: newCodeArr,
