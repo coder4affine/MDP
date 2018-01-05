@@ -7,20 +7,42 @@ import actions from '../actions';
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import HelpButton from '../components/HelpButton';
 
+import I18n from '../i18n';
+
 const { height } = Dimensions.get('window');
 
 export class Home extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     home: PropTypes.object.isRequired,
-    locale: PropTypes.string.isRequired,
     isConnected: PropTypes.bool.isRequired,
+    navigator: PropTypes.object.isRequired,
+    locale: PropTypes.string.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.loadHome = this.loadHome.bind(this);
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (this.props.locale !== nextProps.locale) {
+      this.setTabButton();
+      this.setTitle();
+    }
+  };
+
+  setTabButton() {
+    this.props.navigator.setTabButton({
+      label: I18n.t('hdrHome'),
+    });
+  }
+
+  setTitle() {
+    this.props.navigator.setTitle({
+      title: I18n.t('hdrHome'),
+    });
   }
 
   loadHome() {
@@ -51,7 +73,6 @@ export class Home extends Component {
 
 const mapStateToProps = state => ({
   home: state.home,
-  locale: state.locale,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -21,14 +21,11 @@ export default class App {
   }
 
   currentRoot: '';
-  currentLocale: '';
 
   onStoreUpdate() {
     const { root } = store.getState().app;
-    const { locale } = store.getState().locale;
-    if (this.currentRoot !== root || this.currentLocale !== locale) {
+    if (this.currentRoot !== root) {
       this.currentRoot = root;
-      this.currentLocale = locale;
       iconsLoaded.then(() => {
         this.startApp(root);
       });

@@ -9,6 +9,7 @@ import HelpButton from '../components/HelpButton';
 
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import actions from '../actions';
+import I18n from '../i18n';
 
 export class MyBenefitScreen extends Component {
   static propTypes = {
@@ -16,12 +17,35 @@ export class MyBenefitScreen extends Component {
     auth: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     isConnected: PropTypes.bool.isRequired,
+    navigator: PropTypes.object.isRequired,
+    locale: PropTypes.string.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.getCard = this.getCard.bind(this);
+    this.setTabButton = this.setTabButton.bind(this);
+    this.setTitle = this.setTitle.bind(this);
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (this.props.locale !== nextProps.locale) {
+      this.setTabButton();
+      this.setTitle();
+    }
+  };
+
+  setTabButton() {
+    this.props.navigator.setTabButton({
+      label: I18n.t('hdrMyBenefits'),
+    });
+  }
+
+  setTitle() {
+    this.props.navigator.setTitle({
+      title: I18n.t('hdrMyBenefits'),
+    });
   }
 
   getCard() {

@@ -9,6 +9,8 @@ import ElevatedView from '../components/ElevatedView';
 import Button from '../inputControls/button';
 import HelpButton from '../components/HelpButton';
 
+import I18n from '../i18n';
+
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import actions from '../actions';
 import { CARD_CHANGED } from '../constants/actionTypes';
@@ -41,6 +43,27 @@ export class DigitalCard extends Component {
     this.getCard = this.getCard.bind(this);
     this.selectCard = this.selectCard.bind(this);
     this.showMyCard = this.showMyCard.bind(this);
+    this.setTabButton = this.setTabButton.bind(this);
+    this.setTitle = this.setTitle.bind(this);
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (this.props.locale !== nextProps.locale) {
+      this.setTabButton();
+      this.setTitle();
+    }
+  };
+
+  setTabButton() {
+    this.props.navigator.setTabButton({
+      label: I18n.t('hdrDigitalCard'),
+    });
+  }
+
+  setTitle() {
+    this.props.navigator.setTitle({
+      title: I18n.t('hdrDigitalCard'),
+    });
   }
 
   getCard() {
@@ -125,8 +148,6 @@ export class DigitalCard extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  locale: state.locale.locale,
-  card: state.card.card,
   user: state.user.user,
   digitalCard: state.digitalCard,
 });

@@ -43,7 +43,6 @@ function LocaleWrapper(WrapperComponent, name = '') {
       NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
     };
 
-    componentDidMount = () => {};
 
     componentWillReceiveProps = (nextProps) => {
       if (this.props.locale !== nextProps.locale) {

@@ -8,6 +8,8 @@ import HelpButton from '../components/HelpButton';
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import actions from '../actions';
 
+import I18n from '../i18n';
+
 import Alert from '../components/Alerts';
 
 export class Alerts extends Component {
@@ -15,14 +17,17 @@ export class Alerts extends Component {
     alerts: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
-    navigator: PropTypes.object.isRequired,
     isConnected: PropTypes.bool.isRequired,
+    navigator: PropTypes.object.isRequired,
+    locale: PropTypes.string.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.getAlerts = this.getAlerts.bind(this);
+    this.setTabButton = this.setTabButton.bind(this);
+    this.setTitle = this.setTitle.bind(this);
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -33,7 +38,23 @@ export class Alerts extends Component {
         badge: badgeCount.length,
       });
     }
+    if (this.props.locale !== nextProps.locale) {
+      this.setTabButton();
+      this.setTitle();
+    }
   };
+
+  setTabButton() {
+    this.props.navigator.setTabButton({
+      label: I18n.t('hdrAlerts'),
+    });
+  }
+
+  setTitle() {
+    this.props.navigator.setTitle({
+      title: I18n.t('hdrAlerts'),
+    });
+  }
 
   getAlerts() {
     if (this.props.isConnected) {

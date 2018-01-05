@@ -7,7 +7,7 @@ import moment from 'moment';
 
 import HelpButton from '../components/HelpButton';
 import LocaleWrapper from '../HOC/LocaleWrapper';
-// import I18n from '../i18n';
+import I18n from '../i18n';
 import actions from '../actions';
 
 import MemberResource from '../components/MemberResource';
@@ -18,12 +18,35 @@ export class MemberResources extends Component {
     auth: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     isConnected: PropTypes.bool.isRequired,
+    navigator: PropTypes.object.isRequired,
+    locale: PropTypes.string.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.getMemberResource = this.getMemberResource.bind(this);
+    this.setTabButton = this.setTabButton.bind(this);
+    this.setTitle = this.setTitle.bind(this);
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (this.props.locale !== nextProps.locale) {
+      this.setTabButton();
+      this.setTitle();
+    }
+  };
+
+  setTabButton() {
+    this.props.navigator.setTabButton({
+      label: I18n.t('hdrMemberResource'),
+    });
+  }
+
+  setTitle() {
+    this.props.navigator.setTitle({
+      title: I18n.t('hdrMemberResource'),
+    });
   }
 
   getMemberResource() {
