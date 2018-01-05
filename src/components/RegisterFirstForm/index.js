@@ -25,12 +25,12 @@ const RegisterFirst = ({
     <ScrollView keyboardShouldPersistTaps="handled">
       <View style={{ margin: 10 }}>{!!error && <Text>{error}</Text>}</View>
       <View style={{ margin: 10 }}>
-        <Text style={commonStyle.text}>First Name</Text>
         <Field
           name="FirstName"
           component={TextInput}
           validate={[required, alphabets, maxLength40]}
           placeholder="First Name"
+          label="First Name"
           returnKeyType="next"
           onSubmitEditing={() => {
             this.lastName.focus();
@@ -38,12 +38,12 @@ const RegisterFirst = ({
         />
       </View>
       <View style={{ margin: 10 }}>
-        <Text style={commonStyle.text}>Last Name</Text>
         <Field
           name="LastName"
           component={TextInput}
           validate={[required, alphabets, maxLength40]}
           placeholder="Last Name"
+          label="Last Name"
           inputRef={(el) => {
             this.lastName = el;
           }}
@@ -54,12 +54,12 @@ const RegisterFirst = ({
         />
       </View>
       <View style={{ margin: 10 }}>
-        <Text style={commonStyle.text}>Birth Date</Text>
         <Field
           name="BirthDate"
           component={DatePicker}
           validate={[required, date]}
           placeholder="MM/DD/YYYY"
+          label="Birth Date"
           normalize={normalizeDate}
           returnKeyType="next"
           keyboardType="numeric"
@@ -73,12 +73,12 @@ const RegisterFirst = ({
       </View>
       <View style={{ borderWidth: StyleSheet.hairlineWidth, margin: 5, borderRadius: 4 }}>
         <View style={{ margin: 10 }}>
-          <Text style={commonStyle.text}>Social Security Number</Text>
           <Field
             name="SSN"
             component={TextInput}
             validate={[requiredIfNoMemberId, maxLength20]}
             placeholder="Social Security Number"
+            label="Social Security Number"
             inputRef={(el) => {
               this.ssn = el;
             }}
@@ -101,12 +101,12 @@ const RegisterFirst = ({
           <View style={{ flex: 1, borderTopWidth: StyleSheet.hairlineWidth }} />
         </View>
         <View style={{ margin: 10 }}>
-          <Text style={commonStyle.text}>Medicaid ID</Text>
           <Field
             name="MemberId"
             component={TextInput}
             validate={[requiredIfNoSSN, maxLength20]}
             placeholder="Medicaid ID"
+            label="Medicaid ID"
             inputRef={(el) => {
               this.medicaidId = el;
             }}

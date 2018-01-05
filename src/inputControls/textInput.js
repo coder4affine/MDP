@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TextInput, View, Text, StyleSheet, Platform, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import commonStyle from '../commonStyle';
 
 const styles = StyleSheet.create({
   input: {
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         right: 10,
-        top: 2,
+        top: 30,
       },
       android: {
         right: 14,
@@ -69,7 +70,7 @@ class InputText extends Component {
 
   render() {
     const {
-      input, meta, inputRef, password, ...inputProps
+      input, meta, inputRef, label, password, ...inputProps
     } = this.props;
 
     // do not display warning if the field has not been touched or if it's currently being edited
@@ -77,6 +78,7 @@ class InputText extends Component {
     const errorStyle = !valid && styles.invalid;
     return (
       <View>
+        {!!label && <Text style={commonStyle.text}>{label}</Text>}
         <TextInput
           {...inputProps}
           ref={inputRef}
@@ -120,12 +122,14 @@ InputText.propTypes = {
   password: PropTypes.bool,
   date: PropTypes.bool,
   inputRef: PropTypes.func,
+  label: PropTypes.string,
 };
 
 InputText.defaultProps = {
   password: false,
   date: false,
   inputRef: () => {},
+  label: '',
 };
 
 export default InputText;

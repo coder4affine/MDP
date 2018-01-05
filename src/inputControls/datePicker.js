@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
+import commonStyle from '../commonStyle';
 
 const styles = StyleSheet.create({
   input: {
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         right: 10,
-        top: 2,
+        top: 30,
       },
       android: {
         right: 14,
@@ -136,7 +137,7 @@ class InputText extends Component {
 
   render() {
     const {
-      input, meta, inputRef, ...inputProps
+      input, meta, inputRef, label, ...inputProps
     } = this.props;
     const { OS } = Platform;
     const { showModal, pickerDate } = this.state;
@@ -146,6 +147,7 @@ class InputText extends Component {
 
     return (
       <View>
+        {!!label && <Text style={commonStyle.text}>{label}</Text>}
         <TextInput
           {...inputProps}
           ref={inputRef}
@@ -219,10 +221,12 @@ InputText.propTypes = {
     visited: PropTypes.bool.isRequired,
   }).isRequired,
   inputRef: PropTypes.func,
+  label: PropTypes.string,
 };
 
 InputText.defaultProps = {
   inputRef: () => {},
+  label: '',
 };
 
 export default InputText;
