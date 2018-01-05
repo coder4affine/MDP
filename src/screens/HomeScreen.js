@@ -14,6 +14,7 @@ export class Home extends Component {
     actions: PropTypes.object.isRequired,
     home: PropTypes.object.isRequired,
     locale: PropTypes.string.isRequired,
+    isConnected: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -23,7 +24,9 @@ export class Home extends Component {
   }
 
   loadHome() {
-    this.props.actions.loadHome();
+    if (this.props.isConnected) {
+      this.props.actions.loadHome();
+    }
   }
 
   render() {

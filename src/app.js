@@ -8,6 +8,7 @@ import configureStore from './configureStore';
 import actions from './actions';
 import { registerScreens } from './screens';
 import { iconsMap, iconsLoaded } from './utils/AppIcons';
+import I18n from './i18n';
 
 const store = configureStore();
 
@@ -20,11 +21,14 @@ export default class App {
   }
 
   currentRoot: '';
+  currentLocale: '';
 
   onStoreUpdate() {
     const { root } = store.getState().app;
-    if (this.currentRoot !== root) {
+    const { locale } = store.getState().locale;
+    if (this.currentRoot !== root || this.currentLocale !== locale) {
       this.currentRoot = root;
+      this.currentLocale = locale;
       iconsLoaded.then(() => {
         this.startApp(root);
       });
@@ -37,7 +41,7 @@ export default class App {
       Navigation.startSingleScreenApp({
         screen: {
           screen: 'mdp.PinScreen',
-          title: 'Pin',
+          title: I18n.t('hdrPin'),
           navigatorStyle: {},
         },
       });
@@ -45,7 +49,7 @@ export default class App {
       Navigation.startSingleScreenApp({
         screen: {
           screen: 'mdp.LoginScreen',
-          title: 'Login',
+          title: I18n.t('hdrLogin'),
           navigatorStyle: {},
         },
       });
@@ -73,9 +77,9 @@ export default class App {
       Navigation.startTabBasedApp({
         tabs: [
           {
-            label: 'Home',
+            label: I18n.t('hdrHome'),
             screen: 'mdp.HomeScreen',
-            title: 'Home',
+            title: I18n.t('hdrHome'),
             icon: iconsMap['ios-home-outline'],
             selectedIcon: iconsMap['ios-home'],
             navigatorButtons: {
@@ -92,9 +96,9 @@ export default class App {
             navigatorStyle: {},
           },
           {
-            label: 'My Benefits',
+            label: I18n.t('hdrMyBenefits'),
             screen: 'mdp.MyBenefitsScreen',
-            title: 'My Benefits',
+            title: I18n.t('hdrMyBenefits'),
             icon: iconsMap['ios-medkit-outline'],
             selectedIcon: iconsMap['ios-medkit'],
             navigatorButtons: {
@@ -111,9 +115,9 @@ export default class App {
             navigatorStyle: {},
           },
           {
-            label: 'Digital Card',
+            label: I18n.t('hdrDigitalCard'),
             screen: 'mdp.DigitalCardScreen',
-            title: 'Digital Card',
+            title: I18n.t('hdrDigitalCard'),
             icon: iconsMap['ios-card-outline'],
             selectedIcon: iconsMap['ios-card'],
             navigatorButtons: {
@@ -130,9 +134,9 @@ export default class App {
             navigatorStyle: {},
           },
           {
-            label: 'Member Resource',
+            label: I18n.t('hdrMemberResource'),
             screen: 'mdp.MemberResourceScreen',
-            title: 'Member Resource',
+            title: I18n.t('hdrMemberResource'),
             icon: iconsMap['ios-paper-outline'],
             selectedIcon: iconsMap['ios-paper'],
             navigatorButtons: {
@@ -149,9 +153,9 @@ export default class App {
             navigatorStyle: {},
           },
           {
-            label: 'Alerts',
+            label: I18n.t('hdrAlerts'),
             screen: 'mdp.AlertsScreen',
-            title: 'Alerts',
+            title: I18n.t('hdrAlerts'),
             icon: iconsMap['ios-notifications-outline'],
             selectedIcon: iconsMap['ios-notifications'],
             navigatorButtons: {
@@ -183,10 +187,6 @@ export default class App {
         animationType: 'slide-down',
         title: 'MDP',
         tabsStyle: {
-          tabBarBackgroundColor: '#003a66',
-          tabBarButtonColor: '#ffffff',
-          tabBarSelectedButtonColor: '#ff505c',
-          tabFontFamily: 'BioRhyme-Bold',
           initialTabIndex: 2,
         },
         appStyle: {
@@ -199,7 +199,7 @@ export default class App {
       Navigation.startSingleScreenApp({
         screen: {
           screen: 'mdp.ErrorScreen',
-          title: 'Error',
+          title: I18n.t('hdrError'),
           navigatorStyle: {},
         },
       });

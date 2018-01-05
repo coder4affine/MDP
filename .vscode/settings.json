@@ -10,6 +10,8 @@
     "Barcode",
     "Ionicons",
     "Nums",
-    "Unmount"
+    "Unmount",
+    "medkit",
+    "swipeout"
   ]
 }

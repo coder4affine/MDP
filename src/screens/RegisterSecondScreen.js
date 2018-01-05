@@ -21,32 +21,37 @@ class RegisterSecond extends Component {
   }
 
   register(formData) {
-    return this.props.actions
-      .register(formData)
-      .then(() => {
-        const { user, error } = this.props.auth;
-        if (user) {
-          this.props.changeAppRoot(MAIN);
-        }
-        if (error) {
-          throw new SubmissionError({
-            _error: 'Login failed!',
-          });
-        }
-        if (this.props.register.error) {
-          throw new SubmissionError({
-            _error: 'Login failed!',
-          });
-        }
-      })
-      .catch(() => {
-        const { error } = this.props.register;
-        if (error) {
-          throw new SubmissionError({
-            _error: 'Login failed!',
-          });
-        }
-      });
+    if (this.props.isConnected) {
+      return this.props.actions
+        .register(formData)
+        .then(() => {
+          const { user, error } = this.props.auth;
+          if (user) {
+            this.props.changeAppRoot(MAIN);
+          }
+          if (error) {
+            throw new SubmissionError({
+              _error: 'Login failed!',
+            });
+          }
+          if (this.props.register.error) {
+            throw new SubmissionError({
+              _error: 'Login failed!',
+            });
+          }
+        })
+        .catch(() => {
+          const { error } = this.props.register;
+          if (error) {
+            throw new SubmissionError({
+              _error: 'Login failed!',
+            });
+          }
+        });
+    }
+    throw new SubmissionError({
+      _error: 'No Internet Connection',
+    });
   }
 
   render() {
@@ -71,6 +76,7 @@ RegisterSecond.propTypes = {
   registerData: PropTypes.object.isRequired,
   changeAppRoot: PropTypes.func.isRequired,
   register: PropTypes.object.isRequired,
+  isConnected: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({

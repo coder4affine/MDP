@@ -42,35 +42,40 @@ class RegisterFirst extends Component {
   }
 
   checkUserExist(formData) {
-    const newData = {
-      ...formData,
-      BirthDate: moment(formData.BirthDate, 'L').format('L'),
-      SSN: formData.SSN || '',
-    };
-    return this.props.actions
-      .checkUserExist(newData)
-      .then(() => {
-        const { data, error } = this.props.checkUser;
-        if (data) {
-          const userName = data || '';
-          this.redirectPush({ ...newData, UserName: userName, ConfirmUserName: userName });
-        }
-        if (error) {
+    if (this.props.isConnected) {
+      const newData = {
+        ...formData,
+        BirthDate: moment(formData.BirthDate, 'L').format('L'),
+        SSN: formData.SSN || '',
+      };
+      return this.props.actions
+        .checkUserExist(newData)
+        .then(() => {
+          const { data, error } = this.props.checkUser;
+          if (data) {
+            const userName = data || '';
+            this.redirectPush({ ...newData, UserName: userName, ConfirmUserName: userName });
+          }
+          if (error) {
+            this.props.resetForm();
+            throw new SubmissionError({
+              _error: 'User Not Exist!',
+            });
+          }
+        })
+        .catch(() => {
+          const { error } = this.props.checkUser;
           this.props.resetForm();
-          throw new SubmissionError({
-            _error: 'User Not Exist!',
-          });
-        }
-      })
-      .catch(() => {
-        const { error } = this.props.checkUser;
-        this.props.resetForm();
-        if (error) {
-          throw new SubmissionError({
-            _error: 'Login failed!',
-          });
-        }
-      });
+          if (error) {
+            throw new SubmissionError({
+              _error: 'Login failed!',
+            });
+          }
+        });
+    }
+    throw new SubmissionError({
+      _error: 'No Internet Connection',
+    });
   }
 
   render() {
@@ -91,6 +96,7 @@ RegisterFirst.propTypes = {
   checkUser: PropTypes.object.isRequired,
   resetForm: PropTypes.func.isRequired,
   navigator: PropTypes.object.isRequired,
+  isConnected: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({

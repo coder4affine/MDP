@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
 import moment from 'moment';
 import Icons from 'react-native-vector-icons/Ionicons';
+import Swipeout from 'react-native-swipeout';
 
 export class componentName extends Component {
   static propTypes = {
@@ -18,9 +19,14 @@ export class componentName extends Component {
 
   render() {
     const { item, locale } = this.props;
+    const swipeoutBtns = [
+      {
+        text: 'Button',
+      },
+    ];
     return (
-      <View style={{ flex: 1, flexDirection: 'row', padding: 16 }}>
-        <View style={{ flex: 1 }}>
+      <Swipeout right={swipeoutBtns} buttonWidth={50}>
+        <View style={{ flex: 1, padding: 16 }}>
           {item.AlertTranslations.map(alert =>
               (alert.LanguageCode.toLowerCase() === locale ? (
                 <View key={alert.LanguageCode}>
@@ -39,7 +45,7 @@ export class componentName extends Component {
             <Text>{`Expiry: ${moment(item.ExpiryDate).format('L')}`}</Text>
           </View>
         </View>
-      </View>
+      </Swipeout>
     );
   }
 }

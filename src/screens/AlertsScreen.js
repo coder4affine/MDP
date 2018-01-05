@@ -16,6 +16,7 @@ export class Alerts extends Component {
     auth: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     navigator: PropTypes.object.isRequired,
+    isConnected: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -35,16 +36,18 @@ export class Alerts extends Component {
   };
 
   getAlerts() {
-    const { user, updatedOn } = this.props.auth;
-    if (user) {
-      if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
-        this.props.actions.getAlerts(`${user.token_type} ${user.access_token}`);
-      } else {
-        this.props.actions
-          .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
-          .then(() => {
-            this.props.actions.getAlerts(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`);
-          });
+    if (this.props.isConnected) {
+      const { user, updatedOn } = this.props.auth;
+      if (user) {
+        if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
+          this.props.actions.getAlerts(`${user.token_type} ${user.access_token}`);
+        } else {
+          this.props.actions
+            .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
+            .then(() => {
+              this.props.actions.getAlerts(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`);
+            });
+        }
       }
     }
   }

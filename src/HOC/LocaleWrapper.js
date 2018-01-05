@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Platform, Share } from 'react-native';
+import { Platform, Share, NetInfo, AppState, View, Text, Dimensions } from 'react-native';
 
 import { iconsMap } from '../utils/AppIcons';
 import ENIcon from '../images/countryFlags/en.png';
 import ESIcon from '../images/countryFlags/es.png';
+
+const { width } = Dimensions.get('window');
 
 function LocaleWrapper(WrapperComponent, name = '') {
   class LocaleFilter extends Component {
@@ -22,19 +24,36 @@ function LocaleWrapper(WrapperComponent, name = '') {
     constructor(props) {
       super(props);
 
+      this.state = {
+        appState: AppState.currentState,
+        isConnected: false,
+      };
+
       this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
       this.openLocaleSelect = this.openLocaleSelect.bind(this);
       this.openShare = this.openShare.bind(this);
+      this.handleConnectionChange = this.handleConnectionChange.bind(this);
+      this.handleAppStateChange = this.handleAppStateChange.bind(this);
     }
 
     componentWillMount = () => {
       this.setButton(this.props.locale);
+      NetInfo.isConnected.fetch().then(this.handleConnectionChange);
+      AppState.addEventListener('change', this.handleAppStateChange);
+      NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
     };
+
+    componentDidMount = () => {};
 
     componentWillReceiveProps = (nextProps) => {
       if (this.props.locale !== nextProps.locale) {
         this.setButton(nextProps.locale);
       }
+    };
+
+    componentWillUnmount = () => {
+      AppState.removeEventListener('change', this.handleAppStateChange);
+      NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
     };
 
     onNavigatorEvent(event) {
@@ -140,6 +159,14 @@ function LocaleWrapper(WrapperComponent, name = '') {
       });
     };
 
+    handleAppStateChange = (nextAppState) => {
+      this.setState({ appState: nextAppState });
+    };
+
+    handleConnectionChange(isConnected) {
+      this.setState({ isConnected });
+    }
+
     openShare() {
       const { card } = this.props;
       if (card) {
@@ -157,7 +184,26 @@ function LocaleWrapper(WrapperComponent, name = '') {
     }
 
     render() {
-      return <WrapperComponent {...this.state} {...this.props} />;
+      const { isConnected } = this.state;
+      return (
+        <View style={{ flex: 1 }}>
+          {!isConnected && (
+            <View
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                backgroundColor: 'rgba(231,76,60,1)',
+                padding: 4,
+                zIndex: 10,
+                width,
+              }}
+            >
+              <Text style={{ textAlign: 'center' }}>No Internet Connection</Text>
+            </View>
+          )}
+          <WrapperComponent {...this.state} {...this.props} />
+        </View>
+      );
     }
   }
 

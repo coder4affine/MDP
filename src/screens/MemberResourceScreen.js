@@ -17,6 +17,7 @@ export class MemberResources extends Component {
     memberResource: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
+    isConnected: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -26,16 +27,18 @@ export class MemberResources extends Component {
   }
 
   getMemberResource() {
-    const { user, updatedOn } = this.props.auth;
-    if (user) {
-      if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
-        this.props.actions.getMemberResource(`${user.token_type} ${user.access_token}`);
-      } else {
-        this.props.actions
-          .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
-          .then(() => {
-            this.props.actions.getMemberResource(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`);
-          });
+    if (this.props.isConnected) {
+      const { user, updatedOn } = this.props.auth;
+      if (user) {
+        if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
+          this.props.actions.getMemberResource(`${user.token_type} ${user.access_token}`);
+        } else {
+          this.props.actions
+            .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
+            .then(() => {
+              this.props.actions.getMemberResource(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`);
+            });
+        }
       }
     }
   }

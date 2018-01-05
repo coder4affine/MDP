@@ -88,29 +88,34 @@ class Login extends Component {
   }
 
   login(data) {
-    return this.props.actions
-      .login(data)
-      .then(() => {
-        const { user, error } = this.props.auth;
-        if (user) {
-          this.props.changeAppRoot(MAIN);
-        }
-        if (error) {
+    if (this.props.isConnected) {
+      return this.props.actions
+        .login(data)
+        .then(() => {
+          const { user, error } = this.props.auth;
+          if (user) {
+            this.props.changeAppRoot(MAIN);
+          }
+          if (error) {
+            this.props.resetForm();
+            throw new SubmissionError({
+              _error: 'Login failed!',
+            });
+          }
+        })
+        .catch(() => {
+          const { error } = this.props.auth;
           this.props.resetForm();
-          throw new SubmissionError({
-            _error: 'Login failed!',
-          });
-        }
-      })
-      .catch(() => {
-        const { error } = this.props.auth;
-        this.props.resetForm();
-        if (error) {
-          throw new SubmissionError({
-            _error: 'Login failed!',
-          });
-        }
-      });
+          if (error) {
+            throw new SubmissionError({
+              _error: 'Login failed!',
+            });
+          }
+        });
+    }
+    throw new SubmissionError({
+      _error: 'No Internet Connection',
+    });
   }
 
   render() {
@@ -139,6 +144,7 @@ Login.propTypes = {
   changeAppRoot: PropTypes.func.isRequired,
   resetForm: PropTypes.func.isRequired,
   navigator: PropTypes.object.isRequired,
+  isConnected: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
