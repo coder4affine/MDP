@@ -1,4 +1,4 @@
-import getAlerts from './alertsAction';
+import { getAlerts, changeAlertStatus, getFile } from './alertsAction';
 import { changeAppRoot, appInitialized } from './app';
 import { login, refreshToken, checkUserExist, register, logout } from './authAction';
 import getGroupMember from './digitalCardAction';
@@ -9,6 +9,8 @@ import setPin from './pinActions';
 
 export default {
   getAlerts,
+  changeAlertStatus,
+  getFile,
   changeAppRoot,
   appInitialized,
   login,

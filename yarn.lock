@@ -3993,11 +3993,17 @@ react-native-i18n@^2.0.9:
   dependencies:
     i18n-js "^3.0.2"
 
-react-native-navigation@^1.1.323:
-  version "1.1.323"
-  resolved "https://registry.yarnpkg.com/react-native-navigation/-/react-native-navigation-1.1.323.tgz#4c47d1ba6bbb5e9a4e8e29773f1a0f4e44ee925d"
+react-native-navigation@^1.1.334:
+  version "1.1.334"
+  resolved "https://registry.yarnpkg.com/react-native-navigation/-/react-native-navigation-1.1.334.tgz#255cfe35ea5d7e6edd9d3583dd7a65b9d87736bd"
   dependencies:
     lodash "4.x.x"
+
+react-native-swipeable@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-swipeable/-/react-native-swipeable-0.6.0.tgz#0fe551330018b83c754d27f505709a594f554370"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-swipeout@^2.3.3:
   version "2.3.3"

@@ -179,7 +179,7 @@ export default class App {
           style: {
             contentOverlayColor: 'rgba(0,0,0,0.25)',
           },
-          disableOpenGesture: false,
+          disableOpenGesture: true,
         },
         animationType: 'slide-down',
         title: 'MDP',

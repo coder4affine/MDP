@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { View, StyleSheet, FlatList } from 'react-native';
+
 import moment from 'moment';
 import HelpButton from '../components/HelpButton';
 import LocaleWrapper from '../HOC/LocaleWrapper';
@@ -24,6 +25,8 @@ export class Alerts extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {};
 
     this.getAlerts = this.getAlerts.bind(this);
     this.setTabButton = this.setTabButton.bind(this);

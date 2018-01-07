@@ -43,7 +43,6 @@ function LocaleWrapper(WrapperComponent, name = '') {
       NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
     };
 
-
     componentWillReceiveProps = (nextProps) => {
       if (this.props.locale !== nextProps.locale) {
         this.setButton(nextProps.locale);
@@ -171,11 +170,12 @@ function LocaleWrapper(WrapperComponent, name = '') {
       if (card) {
         Share.share(
           {
-            message: `I am sharing digital card of ${card.FirstName} ${card.LastName}`,
+            message: `I am sharing digital card of *${card.FirstName} ${card.LastName}*`,
             url: 'http://bam.tech',
             title: 'Share Digital Card',
           },
           {
+            subject: '',
             dialogTitle: 'Share Digital Card',
           },
         );
@@ -186,21 +186,16 @@ function LocaleWrapper(WrapperComponent, name = '') {
       const { isConnected } = this.state;
       return (
         <View style={{ flex: 1 }}>
-          {!isConnected && (
-            <View
-              style={{
-                position: 'absolute',
-                bottom: 0,
-                backgroundColor: 'rgba(231,76,60,1)',
-                padding: 4,
-                zIndex: 10,
-                width,
-              }}
-            >
-              <Text style={{ textAlign: 'center' }}>No Internet Connection</Text>
-            </View>
-          )}
           <WrapperComponent {...this.state} {...this.props} />
+          <View
+            style={{
+              backgroundColor: 'rgba(231,76,60,1)',
+              padding: 4,
+              width,
+            }}
+          >
+            <Text style={{ textAlign: 'center' }}>No Internet Connection</Text>
+          </View>
         </View>
       );
     }

@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
         top: 30,
       },
       android: {
-        right: 14,
-        top: 14,
+        right: 10,
+        top: 43,
       },
     }),
   },
@@ -44,12 +44,12 @@ const styles = StyleSheet.create({
   invalid: {
     ...Platform.select({
       ios: {
-        borderColor: 'rgb(244, 67, 54)',
+        borderColor: '#C3281C',
       },
     }),
   },
   error: {
-    color: 'rgb(244, 67, 54)',
+    color: '#C3281C',
     fontSize: 12,
     lineHeight: 12,
     fontWeight: '600',
@@ -87,7 +87,7 @@ class InputText extends Component {
           onFocus={input.onFocus}
           value={input.value}
           style={[styles.input, errorStyle]}
-          underlineColorAndroid={valid ? 'gray' : 'rgb(244, 67, 54)'}
+          underlineColorAndroid={valid ? 'gray' : '#C3281C'}
           secureTextEntry={password && this.state.passwordToggle}
         />
         {password && (
