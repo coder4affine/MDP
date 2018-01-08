@@ -119,8 +119,19 @@ class Login extends Component {
   }
 
   render() {
+    const { isConnected } = this.props;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
+        {!isConnected && (
+          <View
+            style={{
+              backgroundColor: 'rgba(231,76,60,1)',
+              padding: 4,
+            }}
+          >
+            <Text style={{ textAlign: 'center' }}>No Internet Connection</Text>
+          </View>
+        )}
         <Animated.Image source={logo} style={[styles.logo, { height: this.imageHeight }]} />
         <LoginForm onSubmit={this.login} />
         <View

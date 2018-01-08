@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SubmissionError } from 'redux-form';
@@ -55,17 +55,29 @@ class RegisterSecond extends Component {
   }
 
   render() {
-    const { registerData } = this.props;
+    const { registerData, isConnected } = this.props;
     return (
-      <ScrollView
-        style={{
-          flex: 1,
-        }}
-      >
-        {registerData && (
-          <RegisterSecondForm initialValues={registerData} onSubmit={this.register} />
+      <View style={{ flex: 1 }}>
+        {!isConnected && (
+          <View
+            style={{
+              backgroundColor: 'rgba(231,76,60,1)',
+              padding: 4,
+            }}
+          >
+            <Text style={{ textAlign: 'center' }}>No Internet Connection</Text>
+          </View>
         )}
-      </ScrollView>
+        <ScrollView
+          style={{
+            flex: 1,
+          }}
+        >
+          {registerData && (
+            <RegisterSecondForm initialValues={registerData} onSubmit={this.register} />
+          )}
+        </ScrollView>
+      </View>
     );
   }
 }

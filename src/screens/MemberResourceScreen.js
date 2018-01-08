@@ -63,6 +63,10 @@ export class MemberResources extends Component {
             });
         }
       }
+    } else {
+      this.props.navigator.showInAppNotification({
+        screen: 'mdp.Notification',
+      });
     }
   }
 

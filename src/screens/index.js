@@ -14,8 +14,10 @@ import SideMenu from './SideMenu';
 import ErrorScreen from './ErrorScreen';
 import NeedHelpScreen from './NeedHelpScreen';
 import SelectCardScreen from './SelectCardScreen';
+import Notification from './Notification';
 import LanguageSelect from '../components/LanguageSelect';
 import FlagIcon from '../components/FlagIcon';
+import Alerts from '../components/Alerts';
 
 // register all screens of the app (including internal ones)
 export function registerScreens(store, Provider) {
@@ -45,8 +47,15 @@ export function registerScreens(store, Provider) {
   );
   Navigation.registerComponent('mdp.SideMenu', () => SideMenu, store, Provider);
   Navigation.registerComponent('mdp.NeedHelpScreen', () => NeedHelpScreen, store, Provider);
-  Navigation.registerComponent('mdp.SelectCardScreen', () => SelectCardScreen, store, Provider);
+  Navigation.registerComponent(
+    'mdp.DigitalCardScreen.SelectCardScreen',
+    () => SelectCardScreen,
+    store,
+    Provider,
+  );
+  Navigation.registerComponent('mdp.AlertsScreen.Alert', () => Alerts, store, Provider);
   Navigation.registerComponent('mdp.ErrorScreen', () => ErrorScreen, store, Provider);
   Navigation.registerComponent('mdp.LanguageSelect', () => LanguageSelect, store, Provider);
   Navigation.registerComponent('mdp.FlagIcon', () => FlagIcon);
+  Navigation.registerComponent('mdp.Notification', () => Notification);
 }

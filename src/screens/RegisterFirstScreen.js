@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, Platform } from 'react-native';
+import { ScrollView, Platform, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SubmissionError, reset } from 'redux-form';
@@ -79,14 +79,27 @@ class RegisterFirst extends Component {
   }
 
   render() {
+    const { isConnected } = this.props;
     return (
-      <ScrollView
-        style={{
-          flex: 1,
-        }}
-      >
-        <RegisterFirstForm onSubmit={this.checkUserExist} />
-      </ScrollView>
+      <View style={{ flex: 1 }}>
+        {!isConnected && (
+          <View
+            style={{
+              backgroundColor: 'rgba(231,76,60,1)',
+              padding: 4,
+            }}
+          >
+            <Text style={{ textAlign: 'center' }}>No Internet Connection</Text>
+          </View>
+        )}
+        <ScrollView
+          style={{
+            flex: 1,
+          }}
+        >
+          <RegisterFirstForm onSubmit={this.checkUserExist} />
+        </ScrollView>
+      </View>
     );
   }
 }

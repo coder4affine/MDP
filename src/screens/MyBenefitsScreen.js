@@ -49,7 +49,7 @@ export class MyBenefitScreen extends Component {
   }
 
   getCard() {
-    if (this.props.isConnected) {
+    if (!this.props.isConnected) {
       const { user, updatedOn } = this.props.auth;
       if (user) {
         if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
@@ -62,6 +62,10 @@ export class MyBenefitScreen extends Component {
             });
         }
       }
+    } else {
+      this.props.navigator.showInAppNotification({
+        screen: 'mdp.Notification',
+      });
     }
   }
 

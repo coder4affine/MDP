@@ -48,6 +48,10 @@ export class Home extends Component {
   loadHome() {
     if (this.props.isConnected) {
       this.props.actions.loadHome();
+    } else {
+      this.props.navigator.showInAppNotification({
+        screen: 'mdp.Notification',
+      });
     }
   }
 

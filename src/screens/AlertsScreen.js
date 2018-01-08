@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableHighlight } from 'react-native';
 
 import moment from 'moment';
 import HelpButton from '../components/HelpButton';
@@ -31,6 +31,7 @@ export class Alerts extends Component {
     this.getAlerts = this.getAlerts.bind(this);
     this.setTabButton = this.setTabButton.bind(this);
     this.setTitle = this.setTitle.bind(this);
+    this.openAlert = this.openAlert.bind(this);
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -60,7 +61,7 @@ export class Alerts extends Component {
   }
 
   getAlerts() {
-    if (this.props.isConnected) {
+    if (!this.props.isConnected) {
       const { user, updatedOn } = this.props.auth;
       if (user) {
         if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
@@ -73,7 +74,25 @@ export class Alerts extends Component {
             });
         }
       }
+    } else {
+      this.props.navigator.showInAppNotification({
+        screen: 'mdp.Notification',
+      });
     }
+  }
+
+  openAlert(item) {
+    this.props.navigator.push({
+      screen: 'mdp.AlertsScreen.Alert',
+      title: 'Alert',
+      passProps: {
+        item,
+      },
+      navigatorStyle: {
+        screenBackgroundColor: 'white',
+        tabBarHidden: true,
+      },
+    });
   }
 
   render() {
@@ -83,7 +102,13 @@ export class Alerts extends Component {
         {alerts.data && (
           <FlatList
             data={alerts.data}
-            renderItem={({ item }) => <Alert item={item} />}
+            renderItem={({ item }) => (
+              <TouchableHighlight underlayColor="#D3D3D3" onPress={() => this.openAlert(item)}>
+                <View>
+                  <Alert item={item} />
+                </View>
+              </TouchableHighlight>
+            )}
             keyExtractor={item => item.MemberAlertKey}
             ItemSeparatorComponent={() => (
               <View style={{ borderTopWidth: StyleSheet.hairlineWidth }} />

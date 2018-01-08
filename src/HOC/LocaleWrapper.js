@@ -183,21 +183,7 @@ function LocaleWrapper(WrapperComponent, name = '') {
     }
 
     render() {
-      const { isConnected } = this.state;
-      return (
-        <View style={{ flex: 1 }}>
-          <WrapperComponent {...this.state} {...this.props} />
-          <View
-            style={{
-              backgroundColor: 'rgba(231,76,60,1)',
-              padding: 4,
-              width,
-            }}
-          >
-            <Text style={{ textAlign: 'center' }}>No Internet Connection</Text>
-          </View>
-        </View>
-      );
+      return <WrapperComponent {...this.state} {...this.props} />;
     }
   }
 
