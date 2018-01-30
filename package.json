@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
     "test": "jest",
     "lint": "eslint src/**",
     "flow": "flow",
@@ -16,6 +18,7 @@
     "react-native": "^0.51.0",
     "react-native-action-button": "^2.8.3",
     "react-native-barcode-builder": "^1.0.2",
+    "react-native-fetch-blob": "^0.10.8",
     "react-native-i18n": "^2.0.9",
     "react-native-navigation": "^1.1.334",
     "react-native-swipeable": "^0.6.0",

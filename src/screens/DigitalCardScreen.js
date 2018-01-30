@@ -67,24 +67,31 @@ export class DigitalCard extends Component {
   }
 
   getCard() {
-    if (!this.props.isConnected) {
-      const { user, updatedOn } = this.props.auth;
-      if (user) {
-        if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
-          this.props.actions.getGroupMember(`${user.token_type} ${user.access_token}`);
-        } else {
-          this.props.actions
-            .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
-            .then(() => {
-              this.props.actions.getGroupMember(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`);
-            });
-        }
-      }
+    if (this.props.isConnected) {
+      this.getToken().then(token => this.props.actions.getGroupMember(token));
     } else {
       this.props.navigator.showInAppNotification({
         screen: 'mdp.Notification',
       });
     }
+  }
+
+  getToken() {
+    return new Promise((resolve, reject) => {
+      const { user, updatedOn } = this.props.auth;
+      if (moment().isBefore(moment(updatedOn).add(user.expires_in - 10, 'seconds'))) {
+        resolve(`${user.token_type} ${user.access_token}`);
+      } else {
+        this.props.actions
+          .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
+          .then(() => {
+            resolve(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      }
+    });
   }
 
   selectCard() {

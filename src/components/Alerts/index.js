@@ -9,6 +9,7 @@ export class componentName extends Component {
   static propTypes = {
     item: PropTypes.object.isRequired,
     locale: PropTypes.string.isRequired,
+    getFile: PropTypes.func.isRequired,
   };
   constructor(props) {
     super(props);
@@ -20,7 +21,7 @@ export class componentName extends Component {
   }
 
   getFile = (uuid) => {
-    alert(uuid);
+    this.props.getFile(uuid);
   };
 
   openURL = (url) => {
@@ -30,7 +31,7 @@ export class componentName extends Component {
   openFile() {
     const { item } = this.props;
     if (item.SecureURI === 'Y') {
-      this.getFile(item.UUID);
+      this.getFile(item);
     }
     if (item.SecureURI === 'N') {
       this.openURL(item.URI);
@@ -42,6 +43,7 @@ export class componentName extends Component {
 
     return (
       <View style={{ flex: 1, padding: 16 }}>
+        <Text style={{ paddingVertical: 5 }}>{JSON.stringify(item)}</Text>
         {item.AlertTranslations.map(alert =>
             (alert.LanguageCode.toLowerCase() === locale ? (
               <View key={alert.LanguageCode}>

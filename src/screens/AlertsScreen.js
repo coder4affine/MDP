@@ -2,16 +2,44 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { View, StyleSheet, FlatList, TouchableHighlight } from 'react-native';
-
+import { View, StyleSheet, FlatList, TouchableHighlight, Platform } from 'react-native';
+import RNFetchBlob from 'react-native-fetch-blob';
 import moment from 'moment';
 import HelpButton from '../components/HelpButton';
 import LocaleWrapper from '../HOC/LocaleWrapper';
 import actions from '../actions';
-
 import I18n from '../i18n';
-
+import config from '../config';
 import Alert from '../components/Alerts';
+import Api from '../utils/apiUtil';
+
+const openDoc = (path, mime) => {
+  const { android, ios } = RNFetchBlob;
+  if (Platform.OS === 'ios') {
+    ios.openDocument(path);
+  } else {
+    android.actionViewIntent(path, mime);
+  }
+};
+
+const openFile = (token, alert) => {
+  const { fs } = RNFetchBlob;
+  const { dirs } = RNFetchBlob.fs;
+  if (fs.exists(`${dirs.CacheDir}/${alert.URI}`)) {
+    openDoc(`${dirs.CacheDir}/${alert.URI}`, 'application/pdf');
+  } else {
+    Api.jsonService(
+      `${config.serviceApi}MDP/api/alerts/getFile?handle=${alert.UUID}`,
+      'get',
+      null,
+      token,
+    ).then((res) => {
+      fs.createFile(`${dirs.CacheDir}/${alert.URI}`, res.Payload.data.file, 'base64').then(() => {
+        openDoc(`${dirs.CacheDir}/${alert.URI}`, res.Payload.data.contentType);
+      });
+    });
+  }
+};
 
 export class Alerts extends Component {
   static propTypes = {
@@ -32,6 +60,8 @@ export class Alerts extends Component {
     this.setTabButton = this.setTabButton.bind(this);
     this.setTitle = this.setTitle.bind(this);
     this.openAlert = this.openAlert.bind(this);
+    this.getFile = this.getFile.bind(this);
+    this.getToken = this.getToken.bind(this);
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -61,19 +91,36 @@ export class Alerts extends Component {
   }
 
   getAlerts() {
-    if (!this.props.isConnected) {
+    if (this.props.isConnected) {
+      this.getToken().then(token => this.props.actions.getAlerts(token));
+    } else {
+      this.props.navigator.showInAppNotification({
+        screen: 'mdp.Notification',
+      });
+    }
+  }
+
+  getToken() {
+    return new Promise((resolve, reject) => {
       const { user, updatedOn } = this.props.auth;
-      if (user) {
-        if (moment().isBefore(moment(updatedOn).add(user.expires_in, 'seconds'))) {
-          this.props.actions.getAlerts(`${user.token_type} ${user.access_token}`);
-        } else {
-          this.props.actions
-            .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
-            .then(() => {
-              this.props.actions.getAlerts(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`);
-            });
-        }
+      if (moment().isBefore(moment(updatedOn).add(user.expires_in - 10, 'seconds'))) {
+        resolve(`${user.token_type} ${user.access_token}`);
+      } else {
+        this.props.actions
+          .refreshToken({ refresh_token: user.refresh_token, grant_type: 'refresh_token' })
+          .then(() => {
+            resolve(`${this.props.auth.user.token_type} ${this.props.auth.user.access_token}`);
+          })
+          .catch((err) => {
+            reject(err);
+          });
       }
+    });
+  }
+
+  getFile(alert) {
+    if (this.props.isConnected) {
+      this.getToken().then(token => openFile(token, alert));
     } else {
       this.props.navigator.showInAppNotification({
         screen: 'mdp.Notification',
@@ -87,6 +134,7 @@ export class Alerts extends Component {
       title: 'Alert',
       passProps: {
         item,
+        getFile: this.getFile,
       },
       navigatorStyle: {
         screenBackgroundColor: 'white',
@@ -105,7 +153,7 @@ export class Alerts extends Component {
             renderItem={({ item }) => (
               <TouchableHighlight underlayColor="#D3D3D3" onPress={() => this.openAlert(item)}>
                 <View>
-                  <Alert item={item} />
+                  <Alert item={item} getFile={this.getFile} />
                 </View>
               </TouchableHighlight>
             )}

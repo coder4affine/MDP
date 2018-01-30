@@ -36,10 +36,10 @@ const DateSelect = ({
   <ScrollView keyboardShouldPersistTaps="handled">
     <View style={{ margin: 10 }}>{!!error && <Text>{error}</Text>}</View>
     <View style={{ margin: 10 }}>
-      <Text style={commonStyle.text}>Birth Date</Text>
       <Field
         name="BirthDate"
         component={DatePicker}
+        label="Birth Date"
         placeholder="MM/DD/YYYY"
         normalize={normalizeDate}
         returnKeyType="next"
