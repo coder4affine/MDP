@@ -1,6 +1,6 @@
 import * as types from '../constants/actionTypes';
 import Api, { Action } from '../utils/apiUtil';
-import config from '../config';
+import * as config from '../config.json';
 
 export function getAlerts(token) {
   return (dispatch) => {

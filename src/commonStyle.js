@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions, Platform } from 'react-native';
-import config from './config';
+import * as config from './config.json';
 
 const window = Dimensions.get('window');
 export const IMAGE_HEIGHT = window.width / 2;

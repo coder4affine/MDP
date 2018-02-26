@@ -1,7 +1,7 @@
 import * as types from '../constants/actionTypes';
 import { changeAppRoot } from './app';
 import Api, { Action } from '../utils/apiUtil';
-import config from '../config';
+import * as config from '../config.json';
 
 export function login(data) {
   return (dispatch) => {

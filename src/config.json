@@ -1,0 +1,15 @@
+{
+  "defaultLocale": "en",
+  "locale": [
+    {
+      "key": "en",
+      "value": "English"
+    },
+    {
+      "key": "es",
+      "value": "Spanish"
+    }
+  ],
+  "serviceApi": "https://dev.mobiledigitalplatform.com:1024/",
+  "webURI": "https://dev.mobiledigitalplatform.com/"
+}

@@ -1,0 +1,9 @@
+{
+  "Primary": "#1565c0",
+  "PrimaryLight": "#5e92f3",
+  "PrimaryDark": "#003c8f",
+  "PrimaryDarkest": "#002171",
+  "underlayColor": "#bababa",
+  "disabledColor": "#e0e0e0",
+  "errorColor": "#C3281C"
+}

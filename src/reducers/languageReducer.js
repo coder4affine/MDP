@@ -1,5 +1,5 @@
 import * as types from '../constants/actionTypes';
-import config from '../config';
+import * as config from '../config.json';
 
 const initialState = {
   locale: config.defaultLocale,

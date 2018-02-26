@@ -4,11 +4,17 @@ import { Platform } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import moment from 'moment';
 import { PIN, MAIN, LOGIN } from './constants/actionTypes';
-import configureStore from './configureStore';
+import configureStore from './store/configureStore.native';
 import actions from './actions';
-import { registerScreens } from './screens';
+import { registerScreens } from './native/screens';
 import { iconsMap, iconsLoaded } from './utils/AppIcons';
-import I18n from './i18n';
+import I18n from './native/i18n';
+
+import * as styleConfig from './styleConfig.json';
+
+if (typeof global.self === 'undefined') {
+  global.self = global;
+}
 
 const store = configureStore();
 
@@ -38,16 +44,22 @@ export default class App {
       Navigation.startSingleScreenApp({
         screen: {
           screen: 'mdp.PinScreen',
-          title: I18n.t('hdrPin'),
-          navigatorStyle: {},
+          navigatorStyle: {
+            navBarBackgroundColor: styleConfig.PrimaryDark,
+            topBarElevationShadowEnabled: false,
+            navBarNoBorder: true,
+          },
         },
       });
     } else if (root === LOGIN) {
       Navigation.startSingleScreenApp({
         screen: {
           screen: 'mdp.LoginScreen',
-          title: I18n.t('hdrLogin'),
-          navigatorStyle: {},
+          navigatorStyle: {
+            navBarBackgroundColor: styleConfig.PrimaryDark,
+            topBarElevationShadowEnabled: false,
+            navBarNoBorder: true,
+          },
         },
       });
     } else if (root === MAIN) {
